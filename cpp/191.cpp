@@ -1,0 +1,39 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <unordered_map>
+
+using namespace std;
+
+class Solution
+{
+public:
+	int hammingWeight(uint32_t n)
+	{
+		int ret = 0;
+
+		while (n)
+		{
+			n &= n - 1;
+			ret++;
+		}
+
+		return ret;
+	}
+};
+
+int main()
+{
+	Solution solution;
+
+	uint32_t input;
+
+	while (cin >> input)
+	{
+		cout << solution.hammingWeight(input) << endl;
+	}
+
+	while (getchar());
+
+	return 0;
+}
