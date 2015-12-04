@@ -1,3 +1,6 @@
+inline int max(const int a, const int b) { return a > b ? a : b; };
+inline int min(const int a, const int b) { return a < b ? a : b; };
+
 struct TreeNode
 {
 	int val;
@@ -8,7 +11,7 @@ struct TreeNode
 
 struct ListNode
 {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
+	int val;
+	ListNode *next;
+	ListNode(int x) : val(x), next(NULL) {}
 };
