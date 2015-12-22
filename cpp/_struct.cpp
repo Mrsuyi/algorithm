@@ -30,7 +30,6 @@ struct UndirectedGraphNode
     UndirectedGraphNode(int x) : label(x) {};
 };
 
-
 TreeNode* build(vector<int> nums)
 {
 	if (nums.size() == 0) return NULL;
