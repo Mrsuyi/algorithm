@@ -2,37 +2,26 @@
 #include <vector>
 #include <unordered_map>
 
-#define _CRT_SECURE_NO_WARNINGS
-#define scanf scanf_s
-
 using namespace std;
-
-typedef unordered_map<int, int> umap;
 
 class Solution
 {
 public:
-
-	umap map;
-
 	vector<int> twoSum(vector<int>& nums, int target)
 	{
-		vector<int> result;
+		unordered_map<int, int> map;
 
 		for (int i = 0; i < nums.size(); i++)
 		{
-			umap::iterator rest = map.find(target - nums[i]);
+			auto idx = map.find(target - nums[i]);
 
-			if (rest != map.end())
+			if (idx != map.end())
 			{
-				result.push_back(rest->second + 1);
-				result.push_back(i + 1);
-
-				return result;
+				return { idx->second + 1 , i + 1 };
 			}
 			else
 			{
-				map.insert({ nums[i], i });
+				map[nums[i]] = i;
 			}
 		}
 	}
@@ -40,20 +29,7 @@ public:
 
 int main()
 {
-	Solution solution;
-	vector<int> inputs;
-	int input;
-	int target;
-
-	scanf("%d", &target);
-	while (scanf("%d", &input))
-	{
-		inputs.push_back(input);
-	}
-
-	vector<int> result = solution.twoSum(inputs, target);
-	printf("%d %d", result[0], result[1]);
-
 	while (getchar());
+
 	return 0;
 }

@@ -3,56 +3,38 @@
 #include <stack>
 #include <string>
 #include <unordered_map>
+#include <algorithm>	
 
 using namespace std;
-
-struct ListNode
-{
-	int val;
-	ListNode *next;
-	ListNode(int x) : val(x), next(NULL) {}
-};
 
 class Solution
 {
 public:
-	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
+	int lengthOfLongestSubstring(string s)
 	{
-		int carry = 0;
+		int ret = 0;
+		int len = s.length();
+		int cnt = 0;
+		bool flg[128] = { false };
 
-		ListNode* head = new ListNode(0);
-		ListNode* i = head;
-
-		while (l1 && l2)
+		for (int bgn = 0, end = 0; end < len; end++)
 		{
-			int add = carry + l1->val + l2->val;
-			carry = add >= 10;
-
-			i->next = new ListNode(add - carry * 10);
-			i = i->next;
-			
-			l1 = l1->next;
-			l2 = l2->next;
+			if (flg[s[end]])
+			{
+				ret = max(ret, cnt);
+				
+				while (flg[s[end]])
+				{
+					flg[s[bgn]] = false;
+					bgn++;
+					cnt--;
+				}
+			}
+			flg[s[end]] = true;
+			cnt++;
 		}
 
-		if (l2) l1 = l2;
-		while (l1)
-		{
-			int add = carry + l1->val;
-			carry = add >= 10;
-
-			i->next = new ListNode(add - carry * 10);
-			i = i->next;
-
-			l1 = l1->next;
-		}
-
-		if (carry)
-		{
-			i->next = new ListNode(1);
-		}
-
-		return head->next;
+		return max(cnt, ret);
 	}
 };
 

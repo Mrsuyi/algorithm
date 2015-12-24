@@ -3,6 +3,7 @@
 #include <stack>
 #include <string>
 #include <unordered_map>
+#include <algorithm>	
 
 using namespace std;
 
@@ -11,37 +12,30 @@ class Solution
 public:
 	int lengthOfLongestSubstring(string s)
 	{
-		int cnt[128] = { 0 };
-		int max = 0;
-		int len = 0;
+		int len = s.length();
+		int ret = 0;
+		int cnt = 0;
 		int bgn = 0;
+		bool flg[128] = { false };
 
-		for (int i = 0; i < s.size(); i++)
+		for (int i = 0; i < len; i++)
 		{
-			// if same char appears
-			if (cnt[s[i]])
+			if (flg[s[i]])
 			{
-				// record length
-				if (len > max) max = len;
-
-				// remove first char of substr until same char vanish
-				while (bgn < i && cnt[s[i]])
+				ret = max(ret, cnt);
+				
+				while (flg[s[i]])
 				{
-					cnt[s[bgn]]--;
+					flg[s[bgn]] = false;
 					bgn++;
-					len--;
+					cnt--;
 				}
 			}
-
-			// add this char
-			cnt[s[i]]++;
-			len++;
+			flg[s[i]] = true;
+			cnt++;
 		}
 
-		// compare last substr
-		if (len > max) max = len;
-
-		return max;
+		return max(cnt, ret);
 	}
 };
 
