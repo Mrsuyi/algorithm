@@ -1,24 +1,24 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>	
 
 using namespace std;
 
 class Solution
 {
 public:
-	int myAtoi(string str) 
+	int myAtoi(string str)
 	{
-		bool positive = true;
-		double val = 0;
-
-		if (str.length() == 0) return 0;
+		int len = str.length();
+		if (len == 0) return 0;
 
 		int i = 0;
 
-		// eliminate whitespace
 		while (str[i] == ' ') { i++; }
-		
+
+		int symbol = 1;
+
 		if (i == str.length())
 		{
 			return 0;
@@ -29,34 +29,26 @@ public:
 		}
 		else if (str[i] == '-')
 		{
-			positive = false;
+			symbol = -1;
 			i++;
 		}
 
-		// first digit
-		while (i < str.length() && str[i] >= '0' && str[i] <= '9')
+		double ret = 0;
+
+		while (i < len && str[i] >= '0' && str[i] <= '9')
 		{
-			val = val * 10 + (str[i++] - '0');
+			ret = ret * 10 + (str[i++] - '0');
 		}
 
-		val = positive ? val : -val;
+		ret = symbol * ret;
 
-		     if (val > INT_MAX) return INT_MAX;
-		else if (val < INT_MIN) return INT_MIN;
-		else                    return val;
+		return ret > INT_MAX ? INT_MAX : ret < INT_MIN ? INT_MIN : ret;
 	}
 };
 
 int main()
 {
 	Solution solution;
-
-	string input;
-
-	while (cin >> input)
-	{
-		cout << solution.myAtoi(input) << endl;
-	}
 
 	while (getchar());
 

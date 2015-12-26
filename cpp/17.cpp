@@ -15,54 +15,20 @@ public:
 		if (digits.size() == 0) return{};
 
 		vector<string> ret = { "" };
+		string map[8] = { "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
 
-		int len = digits.size();
-		for (int i = 0; i < len; i++)
+		for (auto d : digits)
 		{
 			vector<string> tmp;
-
-			int cnt = ret.size();
-			for (int j = 0; j < cnt; j++)
+			for (auto str : ret)
 			{
-				char bgn = 'a' + (digits[i] - '2') * 3;
-
-				switch (digits[i])
+				for (auto c : map[d - '2'])
 				{
-					case '2':
-					case '3':
-					case '4':
-					case '5':
-					case '6':
-						tmp.push_back(ret[j] + bgn++);
-						tmp.push_back(ret[j] + bgn++);
-						tmp.push_back(ret[j] + bgn++);
-						break;
-
-					case '7':
-						tmp.push_back(ret[j] + 'p');
-						tmp.push_back(ret[j] + 'q');
-						tmp.push_back(ret[j] + 'r');
-						tmp.push_back(ret[j] + 's');
-						break;
-
-					case '8':
-						tmp.push_back(ret[j] + 't');
-						tmp.push_back(ret[j] + 'u');
-						tmp.push_back(ret[j] + 'v');
-						break;
-
-					case '9':
-						tmp.push_back(ret[j] + 'w');
-						tmp.push_back(ret[j] + 'x');
-						tmp.push_back(ret[j] + 'y');
-						tmp.push_back(ret[j] + 'z');
-						break;
+					tmp.push_back(str + c);
 				}
 			}
-
 			ret = tmp;
 		}
-
 		return ret;
 	}
 };

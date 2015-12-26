@@ -53,20 +53,6 @@ public:
 
 int main()
 {
-	Solution solution;
-
-	string input;
-	int    row;
-
-	while (cin >> input)
-	{
-		cin >> row;
-
-		string result = solution.convert(input, row);
-
-		cout << result << endl;
-	}
-
 	while (getchar());
 
 	return 0;

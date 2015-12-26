@@ -7,35 +7,27 @@ using namespace std;
 class Solution
 {
 public:
-
 	int romanToInt(string s)
 	{
 		int ret = 0;
+		int len = s.length();
 		int pre = INT_MAX;
 		int cur = 0;
 
-		for (int i = 0; i < s.length(); i++)
+		int nums[128];
+		nums['I'] = 1;
+		nums['V'] = 5;
+		nums['X'] = 10;
+		nums['L'] = 50;
+		nums['C'] = 100;
+		nums['D'] = 500;
+		nums['M'] = 1000;
+
+		for (int i = 0; i < len; i++)
 		{
-			switch (s[i])
-			{
-			case 'I': cur = 1;    break;
-			case 'V': cur = 5;    break;
-			case 'X': cur = 10;   break;
-			case 'L': cur = 50;   break;
-			case 'C': cur = 100;  break;
-			case 'D': cur = 500;  break;
-			case 'M': cur = 1000; break;
-			}
-
-			if (cur > pre)
-			{
-				ret += cur - 2 * pre;
-			}
-			else
-			{
-				ret += cur;
-			}
-
+			cur = nums[s[i]];
+			ret += cur;
+			if (cur > pre) ret -= 2 * pre;
 			pre = cur;
 		}
 

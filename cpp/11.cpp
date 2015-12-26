@@ -1,10 +1,7 @@
 #include <iostream>
 #include <vector>
-#include <stack>
 #include <string>
-#include <unordered_map>
-
-#include <ctime>
+#include <algorithm>
 
 using namespace std;
 
@@ -13,40 +10,31 @@ class Solution
 public:
 	int maxArea(vector<int>& height)
 	{
-		// find out the max-square
-		int i_l = 0;
-		int i_r = height.size() - 1;
-		int max = INT_MIN;
+		int ret = INT_MIN;
+		int l = 0;
+		int r = height.size() - 1;
 
-		while (i_l != i_r)
+		while (l != r)
 		{
-			int len_x = i_r - i_l;
-			int len_y;
+			int x = r - l;
+			int y = min(height[r], height[l]);
+			ret = max(ret, x * y);
 
-			if (height[i_r] > height[i_l])
+			if (height[r] > height[l])
 			{
-				len_y = height[i_l];
-				while (++i_l < i_r && height[i_l] < len_y);
+				while (++l < r && height[l] < y) {}
 			}
 			else
 			{
-				len_y = height[i_r];
-				while (--i_r > i_l && height[i_r] < len_y);
+				while (--r > l && height[r] < y) {}
 			}
-
-			int s = len_x * len_y;
-			if (s > max) max = s;
 		}
-
-		return max;
+		return ret;
 	}
 };
 
 int main()
 {
-	Solution solution;
-
-
 	while (getchar());
 
 	return 0;

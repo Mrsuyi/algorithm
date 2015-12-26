@@ -12,22 +12,20 @@ class Solution
 public:
 	int threeSumClosest(vector<int>& nums, int target)
 	{
+		int ret;
+		int diff = INT_MAX;
+		int len = nums.size();
+
 		sort(nums.begin(), nums.end());
 
-		int sum;
-		int diff = INT_MAX;
-
-		int i_end = nums.size() - 2;
-
-		for (int i = 0; i < i_end; i++)
+		for (int i = 0; i < len - 2; i++)
 		{
-			int j = i + 1, k = i_end + 1;
+			int j = i + 1, k = len - 1;
 
 			while (j < k)
 			{
 				int s = nums[i] + nums[j] + nums[k];
 				int d = target - s;
-
 				if (d == 0) return s;
 
 				d > 0 ? j++ : k--;
@@ -36,22 +34,17 @@ public:
 				if (d < diff)
 				{
 					diff = d;
-					sum = s;
+					ret = s;
 				}
 			}
 		}
-
-		return sum;
+		return ret;
 	}
 };
 
 int main()
 {
 	Solution solution;
-
-	vector<int> input = { 1, 1, 1, 0 };
-
-	cout << solution.threeSumClosest(input, -100) << endl;
 
 	while (getchar());
 

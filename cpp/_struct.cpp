@@ -30,40 +30,10 @@ struct UndirectedGraphNode
     UndirectedGraphNode(int x) : label(x) {};
 };
 
-TreeNode* build(vector<int> nums)
+struct Interval
 {
-	if (nums.size() == 0) return NULL;
-
-	TreeNode* root = new TreeNode(nums[0]);
-	TreeNode* node = root;
-	bool fresh = true;
-	queue<TreeNode*> q;
-
-	for (int i = 1; i < nums.size(); i++)
-	{
-		if (fresh)
-		{
-			if (nums[i] != 0)
-			{
-				TreeNode* add = new TreeNode(nums[i]);
-				q.push(add);
-				node->left = add;
-			}
-		}
-		else
-		{
-			if (nums[i] != 0)
-			{
-				TreeNode* add = new TreeNode(nums[i]);
-				q.push(add);
-				node->right = add;
-
-				node = q.front();
-				q.pop();
-			}
-		}
-		fresh = !fresh;
-	}
-
-	return root;
-}
+    int start;
+    int end;
+    Interval() : start(0), end(0) {}
+    Interval(int s, int e) : start(s), end(e) {}
+};

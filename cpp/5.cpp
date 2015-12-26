@@ -11,14 +11,13 @@ using namespace std;
 inline int max(const int a, const int b) { return a > b ? a : b; };
 inline int min(const int a, const int b) { return a < b ? a : b; };
 
+// Manacher	
 class Solution
 {
 public:
-	// Manacher
 	string longestPalindrome(string s)
 	{
-		const int len = s.length();
-
+		int len = s.length();
 		if (len == 1) return s;
 
 		// preprocess  aba -> ^#a#b#c$
@@ -31,20 +30,16 @@ public:
 		}
 		str += "#$";
 
-
 		// search
         int n = str.size(), center = 0, mx = 0;
 		vector<int> palin(n, 0);
 
 		for (int i = 1; i < n - 1; i++)
 		{
-			// derive from exist palin
 			palin[i] = mx > i ? min(palin[2 * center - i], mx - i) : 1;
 
-			// expand
 			while (str[i + palin[i]] == str[i - palin[i]]) palin[i]++;
 			
-			// push center forward
 			if (i + palin[i] > mx)
 			{
 				mx = i + palin[i];
@@ -66,53 +61,46 @@ public:
 
 		return s.substr((index - max) / 2, max - 1);
 	}
+};
 
+// dp
+class Solution
+{
+public:
 	string longestPalindrome(string s)
 	{
-		if (s.size() <= 2)
-		{
-			return s;
-		}
+		int len = s.size();
+		if (len < 2) return s;
 
-		int max_l = 0;
-		int max_r = 0;
+		vector<vector<bool>> dp(len, vector<bool>(len, false));
+
+		int max_idx = 0;
 		int max_len = 1;
 
-		// dp
-		bool** palin = new bool*[s.size()];
-		for (int i = 0; i < s.size(); i++)
-		{
-			palin[i] = new bool[s.size()];
-			memset(palin[i], false, sizeof(bool) * s.size());
-		}
+		dp[0][1] = s[0] == s[1];
 
-		// init dp
-		palin[0][1] = s[0] == s[1];
-
-		for (int i = 2; i < s.size(); i++)
+		for (int i = 2; i < len; i++)
 		{
-			palin[i][i]		= true;
-			palin[i][i - 1] = true;
-			palin[i - 1][i] = s[i] == s[i - 1];
-			palin[i - 2][i] = s[i] == s[i - 2];
+			dp[i][i] = true;
+			dp[i][i - 1] = true;
+			dp[i - 1][i] = s[i] == s[i - 1];
+			dp[i - 2][i] = s[i] == s[i - 2];
 
 			for (int j = 0; j < i; j++)
 			{
-				if (palin[j + 1][i - 1] && s[j] == s[i])
+				if (dp[j + 1][i - 1] && s[j] == s[i])
 				{
-					palin[j][i] = true;
-					int len = i - j + 1;
-					if (len > max_len)
+					dp[j][i] = true;
+					if (i - j + 1 > max_len)
 					{
-						max_l = j;
-						max_r = i;
-						max_len = len;
+						max_idx = j;
+						max_len = i - j + 1;
 					}
 				}
 			}
 		}
-
-		return string(s, max_l, max_len);
+		
+		return string(s, max_idx, max_len);
 	}
 };
 
