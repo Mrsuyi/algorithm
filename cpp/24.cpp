@@ -21,23 +21,19 @@ public:
 	{
 		ListNode* ret = new ListNode(0);
 		ret->next = head;
-
 		ListNode* pre = ret;
 
 		while (pre->next && pre->next->next)
 		{
 			ListNode* l = pre->next;
 			ListNode* r = pre->next->next;
-
-			ListNode* tmp = r->next;
+			ListNode* nxt = r->next;
 
 			pre->next = r;
 			r->next = l;
-			l->next = tmp;
-
+			l->next = nxt;
 			pre = l;
 		}
-
 		return ret->next;
 	}
 };

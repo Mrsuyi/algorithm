@@ -9,43 +9,22 @@ class Solution
 public:
 	int removeDuplicates(vector<int>& nums)
 	{
-		if (nums.size() == 0) return 0;
-
-		vector<int> ret;
-
-		ret.push_back(nums[0]);
-
-		for (int i = 1; i < nums.size(); i++)
+		int len = nums.size();
+		int i = 0, j = 1;
+		while (j < len)
 		{
-			if (nums[i] != ret.back())
+			if (nums[j] != nums[i])
 			{
-				ret.push_back(nums[i]);
+				nums[++i] = nums[j];
 			}
+			j++;
 		}
-
-		nums = ret;
-
-		return ret.size();
+		return len ? i + 1 : 0;
 	}
 };
 
 int main()
 {
-	Solution solution;
-
-	vector<int> inputs;
-	int count;
-
-	cin >> count;
-	while (count--)
-	{
-		int input;
-		cin >> input;
-		inputs.push_back(input);
-	}
-
-	cout << solution.removeDuplicates(inputs) << endl;
-
 	while (getchar());
 
 	return 0;

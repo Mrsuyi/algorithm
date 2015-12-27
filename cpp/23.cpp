@@ -28,15 +28,11 @@ public:
 
 		for (auto node : lists)
 		{
-			if (node)
-			{
-				vals.insert(make_pair(node->val, node));
-			}
+			if (node) { vals.insert(make_pair(node->val, node)); }
 		}
 
 		ListNode* head = new ListNode(0);
 		ListNode* i = head;
-
 		while (!vals.empty())
 		{
 			auto max = vals.begin();
@@ -48,7 +44,6 @@ public:
 			}
 			vals.erase(max);
 		}
-
 		return head->next;
 	}
 };

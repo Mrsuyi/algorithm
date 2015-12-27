@@ -10,31 +10,24 @@ using namespace std;
 class Solution
 {
 public:
-	vector<string> ret;
-
 	vector<string> generateParenthesis(int n)
 	{
-		ret.clear();
-
-		append("", n, n);
-		
+		vector<string> ret;
+		append(ret, "", n, n);
 		return ret;
 	}
 
-	void append(string prefix, int l, int r)
+	void append(vector<string>& ret, string prefix, int l, int r)
 	{
 		if (l == 0)
 		{
-			prefix += string(r, ')');
-			ret.push_back(prefix);
+			ret.push_back(prefix + string(r, ')'));
 			return;
 		}
-
-		append(prefix + '(', l - 1, r);
-
+		append(ret, prefix + '(', l - 1, r);
 		if (l < r)
-		{
-			append(prefix + ')', l, r - 1);
+		{ 
+			append(ret, prefix + ')', l, r - 1);
 		}
 	}
 };
