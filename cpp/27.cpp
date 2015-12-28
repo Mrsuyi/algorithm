@@ -9,41 +9,21 @@ class Solution
 public:
 	int removeElement(vector<int>& nums, int val)
 	{
-		vector<int> ret;
-
-		for (int i = 0; i < nums.size(); i++)
+		int i = 0;
+		for (int j = 0; j < nums.size(); j++)
 		{
-			if (nums[i] != val)
+			if (nums[j] != val)
 			{
-				ret.push_back(nums[i]);
+				nums[i++] = nums[j];
 			}
 		}
-
-		nums = ret;
-
-		return ret.size();
+		return i;
 	}
 };
 
 int main()
 {
 	Solution solution;
-
-	vector<int> inputs;
-	int count;
-	int remove;
-
-	cin >> count;
-	while (count--)
-	{
-		int input;
-		cin >> input;
-		inputs.push_back(input);
-	}
-
-	cin >> remove;
-
-	cout << solution.removeElement(inputs, remove) << endl;
 
 	while (getchar());
 

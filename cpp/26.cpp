@@ -13,10 +13,7 @@ public:
 		int i = 0, j = 1;
 		while (j < len)
 		{
-			if (nums[j] != nums[i])
-			{
-				nums[++i] = nums[j];
-			}
+			if (nums[j] != nums[i]) nums[++i] = nums[j];
 			j++;
 		}
 		return len ? i + 1 : 0;
