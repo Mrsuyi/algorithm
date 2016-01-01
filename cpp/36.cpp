@@ -9,13 +9,9 @@ class Solution
 public:
 	bool isValidSudoku(vector<vector<char>>& board)
 	{
-		bool row[9][9];
-		bool col[9][9];
-		bool block[9][9];
-
-		memset(row, 0, sizeof(row));
-		memset(col, 0, sizeof(col));
-		memset(block, 0, sizeof(block));
+		bool row[9][9] = { 0 };
+		bool col[9][9] = { 0 };
+		bool block[9][9] = { 0 };
 
 		for (int i = 0; i < 9; i++)
 		for (int j = 0; j < 9; j++)
@@ -48,23 +44,6 @@ public:
 int main()
 {
 	Solution solution;
-
-	vector<vector<char>> board;
-
-	for (int i = 0; i < 9; i++)
-	{
-		vector<char> line;
-
-		for (int j = 0; j < 9; j++)
-		{
-			line.push_back(cin.get());
-		}
-		cin.get();
-
-		board.push_back(line);
-	}
-
-	cout << (solution.isValidSudoku(board) ? "true" : "false") << endl;
 
 	while (getchar());
 

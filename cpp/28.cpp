@@ -94,6 +94,65 @@ public:
 	}
 };
 
+// DFA
+class Solution
+{
+public:
+	int strStr(string haystack, string needle)
+	{
+		int l1 = haystack.length();
+		int l2 = needle.length();
+		if (l2 == 0) return 0;
+
+		vector<vector<int>> trans(l2, vector<int>(CHAR_MAX, 0));
+		vector<int> prefix(l2, 0);
+		
+		trans[0][needle[0]] = 1;
+		for (int i = 1; i < l2; i++)
+		{
+			int j = i;
+			do
+			{
+				j = prefix[j - 1];
+				if (needle[i] == needle[j])
+				{
+					prefix[i] = j + 1;
+					break;
+				}
+			}
+			while (j);
+
+			for (int c = 0; c <= CHAR_MAX; c++)
+			{
+				if (c == needle[i])
+				{
+					trans[i][c] = i + 1;
+					continue;
+				}
+
+				int j = i;
+				do
+				{
+					j = prefix[j - 1];
+					if (c == needle[j])
+					{
+						trans[i][c] = j + 1;
+						break;
+					}
+				}
+				while (j);
+			}
+		}
+
+		for (int i = 0, s = 0; i < l1; i++)
+		{
+			s = trans[s][haystack[i]];
+			if (s == l2) return i - l2 + 1;
+		}
+		return -1;
+	}
+};
+
 
 int main()
 {

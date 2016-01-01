@@ -14,21 +14,19 @@ public:
 	{
 		for (int i = nums.size() - 2; i >= 0; i--)
 		{
-			int min = INT_MAX;
-			int i_min;
-			for (int j = i + 1; j < nums.size(); j++)
+			if (nums[i] < nums[i + 1])
 			{
-				if (nums[j] > nums[i] && nums[j] < min)
+				int idx = i + 1;
+				for (int j = i + 2; j < nums.size(); j++)
 				{
-					i_min = j;
-					min = nums[j];
+					if (nums[j] > nums[i] && nums[j] < nums[idx])
+					{
+						idx = j;
+					}
 				}
-			}
-			if (min != INT_MAX)
-			{
 				int tmp = nums[i];
-				nums[i] = nums[i_min];
-				nums[i_min] = tmp;
+				nums[i] = nums[idx];
+				nums[idx] = tmp;
 				sort(nums.begin() + i + 1, nums.end());
 				return;
 			}

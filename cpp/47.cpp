@@ -12,53 +12,36 @@ class Solution
 public:
 	vector<vector<int>> permuteUnique(vector<int>& nums)
 	{
-		vector<pair<int, int>> cnt;
-
-		sort(nums.begin(), nums.end());
-
-		for (int i = 0; i < nums.size(); i++)
-		{
-			if (i != 0 && nums[i] == nums[i - 1])
-			{
-				cnt.back().second++;
-			}
-			else
-			{
-				cnt.push_back(make_pair(nums[i], 1));
-			}
-		}
-
 		vector<vector<int>> ret;
+		vector<bool> chosen(nums.size(), false);
 		vector<int> prefix;
-		search(prefix, cnt, nums.size(), ret);
-
+		sort(nums.begin(), nums.end());
+		search(prefix, nums, chosen, ret);
 		return ret;
 	}
 
-	void search(vector<int>& prefix, vector<pair<int, int>>& nums, int remain, vector<vector<int>>& ret)
+	void search(vector<int>& prefix, vector<int>& nums, vector<bool>& chosen, vector<vector<int>>& ret)
 	{
-		if (remain == 1)
+		if (prefix.size() == nums.size() - 1)
 		{
-			for (auto& num : nums)
-			{
-				if (num.second)
-				{
-					ret.push_back(vector<int>(prefix));
-					ret.back().push_back(num.first);
-					return;
-				}
-			}
+			int i = 0;
+			while (chosen[i]) { i++; }
+			ret.push_back(prefix);
+			ret.back().push_back(nums[i]);
+			return;
 		}
 
-		for (auto& num : nums)
+		for (int i = 0; i < nums.size(); i++)
 		{
-			if (num.second)
+			if (i > 0 && nums[i] == nums[i - 1] && !chosen[i - 1]) continue;
+
+			if (!chosen[i])
 			{
-				num.second--;
-				prefix.push_back(num.first);
-				search(prefix, nums, remain - 1, ret);
+				chosen[i] = true;
+				prefix.push_back(nums[i]);
+				search(prefix, nums, chosen, ret);
 				prefix.pop_back();
-				num.second++;
+				chosen[i] = false;
 			}
 		}
 	}
@@ -66,8 +49,6 @@ public:
 
 int main()
 {
-	Solution solution;
-
 	while (getchar());
 
 	return 0;

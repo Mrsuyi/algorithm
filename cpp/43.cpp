@@ -14,42 +14,32 @@ public:
 	{
 		if (num1 == "0" || num2 == "0") return "0";
 
-		vector<int> digits;
-		int len1 = num1.length();
-		int len2 = num2.length();
-		int max_len = num1.length() + num2.length();
-
-		digits.reserve(max_len + 1);
+		int l1 = num1.length();
+		int l2 = num2.length();
+		int l = num1.length() + num2.length();
+		vector<int> digits(l);
 
 		reverse(num1.begin(), num1.end());
 		reverse(num2.begin(), num2.end());
-		
-		// multiply each digit
-		for (int i = 0; i < max_len; i++)
+
+		for (int i = 0; i < l; i++)
 		{
 			int sum = 0, n1 = 0, n2 = i - n1;
-
-			while (n2 >= len2) { n1++; n2--; }
-
-			while (n1 < len1 && n2 >= 0) { sum += (num1[n1++] - '0') * (num2[n2--] - '0'); }
-
-			digits.push_back(sum);
+			while (n2 >= l2) { n1++; n2--; }
+			while (n1 < l1 && n2 >= 0) { sum += (num1[n1++] - '0') * (num2[n2--] - '0'); }
+			digits[i] = sum;
 		}
 
-		// add up
 		string ret;
-		for (int i = 0; i < max_len; i++)
+		for (int i = 0; i < l; i++)
 		{
 			ret += '0' + digits[i] % 10;
 			digits[i + 1] += digits[i] / 10;
 		}
 
-		// eliminate 0
+		if (ret[l - 1] == '0') ret.pop_back();
 		reverse(ret.begin(), ret.end());
-		int i = 0;
-		while (ret[i] == '0') { i++; }
-
-		return string(ret, i);
+		return ret;
 	}
 };
 
