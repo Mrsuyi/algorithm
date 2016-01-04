@@ -18,7 +18,6 @@ public:
 		string ret;
 		unsigned chosen = 0;
 
-		// chosen's bit[1-9] represent if the number is avalible
 		for (int i = 1; i <= n; i++)
 		{
 			chosen |= 1 << i;
@@ -31,7 +30,6 @@ public:
 
 	void search(string& prefix, unsigned chosen, int n, int k)
 	{
-		// if only 1 number is left, game over
 		if (n == 1)
 		{
 			int i = 1;
@@ -40,10 +38,7 @@ public:
 			return;
 		}
 
-		// decide the number's index
 		int index = k / factorial[n - 1];
-
-		// get the [index] available number
 		int i = 0, j = index;
 		do
 		{
@@ -52,13 +47,8 @@ public:
 		}
 		while (j-- > 0);
 
-		// add number to prefix
 		prefix += '0' + i;
-
-		// eliminate the number
 		chosen &= ~(1 << i);
-
-		// search for next number
 		search(prefix, chosen, n - 1, k - index * factorial[n - 1]);
 	}
 };

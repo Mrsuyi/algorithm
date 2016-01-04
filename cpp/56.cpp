@@ -16,28 +16,31 @@ struct Interval
 class Solution
 {
 public:
-	vector<Interval> merge(vector<Interval>& intervals)
-	{
-		sort(intervals.begin(), intervals.end(), cmp);
-
-		vector<Interval> ret;
-		int len = intervals.size();
-		for (int i = 0; i < len;)
-		{
-			int bgn = intervals[i].start;
-			int far = intervals[i].end;
-			while (++i < len && intervals[i].start <= far)
-			{
-				far = max(far, intervals[i].end);
-			}
-			ret.push_back(Interval(bgn, far));
-		}
-		return ret;
-	}
-
 	static bool cmp(const Interval& i1, const Interval& i2)
 	{
 		return i1.start < i2.start;
+	}
+
+	vector<Interval> merge(vector<Interval>& intervals)
+	{
+		int len = intervals.size();
+		if (len == 0) return {};
+
+		sort(intervals.begin(), intervals.end(), cmp);
+
+		vector<Interval> ret = { intervals.front() };
+		for (int i = 1; i < len; i++)
+		{
+			if (intervals[i].start <= ret.back().end)
+			{
+				ret.back().end = max(ret.back().end, intervals[i].end);
+			}
+			else
+			{
+				ret.push_back(intervals[i]);
+			}
+		}
+		return ret;
 	}
 };
 

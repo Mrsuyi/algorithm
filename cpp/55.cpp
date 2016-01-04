@@ -9,8 +9,6 @@ using namespace std;
 
 class Solution
 {
-private:
-	inline int max(int a, int b) { return a > b ? a : b; }
 public:
 	bool canJump(vector<int>& nums)
 	{
@@ -21,9 +19,7 @@ public:
 		for (int i = 0; i < len; i++)
 		{
 			if (far < i) return false;
-
 			far = max(far, i + nums[i]);
-
 			if (far >= last) return true;
 		}
 		return true;
