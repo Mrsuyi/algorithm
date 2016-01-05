@@ -12,23 +12,26 @@ class Solution
 public:
 	int mySqrt(int x)
 	{
-		if (x == 0 || x == 1) return x;
-
-		int l = 0, r = x, mid = (l + r) / 2;
-
-		while (l < r)
+		int l = 1, r = x, mid;
+		while (l <= r)
 		{
+			int mid = l + (r - l) / 2;
 			int quo = x / mid;
 
-			     if (quo == mid) break;
-			else if (quo < mid)  r = mid - 1;
-			else                 l = mid + 1;
-
-			mid = (l + r) / 2;
+			if (quo == mid)
+			{
+				return mid;
+			}
+			else if (quo < mid)
+			{
+				r = mid - 1;
+			}
+			else
+			{
+				l = mid + 1;
+			}
 		}
-
-		while (mid * mid > x) mid--;
-		return mid;
+		return l - 1;
 	}
 };
 

@@ -19,41 +19,26 @@ class Solution
 public:
 	ListNode* rotateRight(ListNode* head, int k)
 	{
-		if (!head || !head->next) return head;
+		if (!head || !head->next || k == 0) return head;
 
 		ListNode* r = head;
 		ListNode* l = head;
 
-		// mov until r moved k steps, or r reached tail
-		int len = 1;
-		int cnt = k;
-		while (cnt && r->next)
+		int steps = k;
+		while (steps && r->next)
 		{
 			r = r->next;
-			cnt--;
-			len++;
+			steps--;
 		}
-
-		// k steps is not finish, means k > len
-		if (cnt > 0)
+		if (steps > 0)
 		{
-			int rem = k % len;
-
-			if (rem == 0) return head;
-
-			int mov = len - rem - 1;
-			while (mov--) { l = l->next; }
+			return rotateRight(head, k % (k - steps + 1));
 		}
-		else
+		while (r->next)
 		{
-			while (r->next)
-			{
-				r = r->next;
-				l = l->next;
-			}
+			r = r->next;
+			l = l->next;
 		}
-
-		// list operation
 		r->next = head;
 		head = l->next;
 		l->next = NULL;

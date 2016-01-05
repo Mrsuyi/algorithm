@@ -1,76 +1,36 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
 class Solution
 {
-private:
-	inline string single(string input, bool carry)
-	{
-		if (!carry) return input;
-	
-		string ret;
-
-		auto i = input.begin();
-
-		while (i != input.end() && *i == '1')
-		{
-			ret += '0';
-			i++;
-		}
-
-		if (i != input.end())
-		{
-			ret += '1';
-			i++;
-			ret += string(i, input.end());
-		}
-		else
-		{
-			ret += '1';
-		}
-
-		return ret;
-	}
-
 public:
 	string addBinary(string a, string b)
-	{
-		string ret;
+	{	
+		int l1 = a.size();
+		int l2 = b.size();
+		int l = max(l1, l2);
+		string ret(l, '0');
 
 		reverse(a.begin(), a.end());
 		reverse(b.begin(), b.end());
 
-		auto ia = a.begin();
-		auto ib = b.begin();
+		a += string(l - l1, '0');
+		b += string(l - l2, '0');
 
-		unsigned carry = 0;
-
-		for (; ia != a.end() && ib != b.end(); ia++, ib++)
+		int c = 0;
+		for (int i = 0; i < l; i++)
 		{
-			unsigned add = (*ia - '0') + (*ib - '0') + carry;
-
-			ret += ('0' + (add & 1UL));
-			carry = add >> 1;
+			int sum = a[i] - '0' + b[i] - '0' + c;
+			ret[i] = '0' + (sum & 1);
+			c = (sum & 2) >> 1;
 		}
-
-		if (ia != a.end())
-		{
-			ret += single(string(ia, a.end()), carry);
-		}
-		else if (ib != b.end())
-		{
-			ret += single(string(ib, b.end()), carry);
-		}
-		else if (carry)
-		{
-			ret += '1';
-		}
+		if (c) ret.push_back('1');
 
 		reverse(ret.begin(), ret.end());
-
 		return ret;
 	}
 };
@@ -79,15 +39,7 @@ int main()
 {
 	Solution solution;
 
-	string s1, s2;
-
-	while (true)
-	{
-		cin >> s1;
-		cin >> s2;
-
-		cout << solution.addBinary(s1, s2) << endl;
-	}
+	solution.addBinary("11", "1");
 
 	while (getchar());
 

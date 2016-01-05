@@ -6,35 +6,20 @@ using namespace std;
 
 class Solution
 {
-private:
-	int dp[10000] = { 1, 2 };
-	int dp_len = 2;
-
 public:
 	int climbStairs(int n)
 	{
-		int i = n - 1;
-
-		while (dp_len <= i)
+		int dp[10000] = { 1, 2 };
+		for (int i = 2; i < n; i++)
 		{
-			dp[dp_len++] = dp[dp_len - 1] + dp[dp_len - 2];
+			dp[i] = dp[i - 1] + dp[i - 2];
 		}
-
-		return dp[i];
+		return dp[n - 1];
 	}
 };
 
 int main()
 {
-	Solution solution;
-
-	int input;
-
-	while (cin >> input)
-	{
-		cout << solution.climbStairs(input) << endl;
-	}
-
 	while (getchar());
 
 	return 0;

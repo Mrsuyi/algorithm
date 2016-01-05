@@ -9,47 +9,30 @@ using namespace std;
 
 class Solution
 {
-private:
-	int factorial[9] = { 0, 1, 2, 6, 24, 120, 720, 5040, 40320 };
-
 public:
 	string getPermutation(int n, int k)
 	{
+		int factorial[9] = { 1, 1, 2, 6, 24, 120, 720, 5040, 40320 };
 		string ret;
-		unsigned chosen = 0;
+		k--;
+		unsigned nums = 0xFFFFFFFF;
 
-		for (int i = 1; i <= n; i++)
+		for (int i = n - 1; i >= 0; i--)
 		{
-			chosen |= 1 << i;
-		}
+			int num = (k / factorial[i]) + 1;
+			k %= factorial[i];
 
-		search(ret, chosen, n, k - 1);
+			int j = 0;
+			while (num)
+			{
+				if (nums & (1UL << j++)) num--;
+			}
+
+			ret += '0' + j--;
+			nums &= ~(1 << j);
+		}
 
 		return ret;
-	}
-
-	void search(string& prefix, unsigned chosen, int n, int k)
-	{
-		if (n == 1)
-		{
-			int i = 1;
-			while (!(chosen & (1 << i))) { i++; }
-			prefix += '0' + i;
-			return;
-		}
-
-		int index = k / factorial[n - 1];
-		int i = 0, j = index;
-		do
-		{
-			i++;
-			while (!(chosen & (1 << i))) { i++; }
-		}
-		while (j-- > 0);
-
-		prefix += '0' + i;
-		chosen &= ~(1 << i);
-		search(prefix, chosen, n - 1, k - index * factorial[n - 1]);
 	}
 };
 
@@ -57,7 +40,12 @@ int main()
 {
 	Solution solution;
 
+	cout << solution.getPermutation(3, 1) << endl;
 	cout << solution.getPermutation(3, 2) << endl;
+	cout << solution.getPermutation(3, 3) << endl;
+	cout << solution.getPermutation(3, 4) << endl;
+	cout << solution.getPermutation(3, 5) << endl;
+	cout << solution.getPermutation(3, 6) << endl;
 
 	while (getchar());
 

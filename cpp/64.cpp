@@ -9,21 +9,19 @@ using namespace std;
 
 class Solution
 {
-private:
-	inline int min(const int a, const int b) { return a < b ? a : b; };
 public:
 	int minPathSum(vector<vector<int>>& grid)
 	{
 		int m = grid.size();
 		int n = grid[0].size();
 
-		int** dp = new int*[m + 1];
-		for (int i = 0; i <= m; i++)
+		vector<vector<int>> dp(m + 1, vector<int>(n + 1));
+
+		fill(dp[0].begin(), dp[0].end(), INT_MAX);
+		for (auto& v : dp)
 		{
-			dp[i] = new int[n + 1];
-			dp[i][0] = INT_MAX;
+			v[0] = INT_MAX;
 		}
-		fill_n(dp[0], n + 1, INT_MAX);
 		dp[0][1] = 0;
 
 		for (int i = 1; i <= m; i++)

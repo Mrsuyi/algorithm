@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -9,55 +10,31 @@ class Solution
 public:
 	vector<int> plusOne(vector<int>& digits)
 	{
-		auto i = digits.end() - 1;
+		reverse(digits.begin(), digits.end());
 
-		while (i != digits.begin() && *i == 9)
+		bool c = true;
+		for (int i = 0; i < digits.size(); i++)
 		{
-			*i = 0;
-			i--;
+			if (digits[i] == 9)
+			{
+				digits[i] = 0;
+			}
+			else
+			{
+				digits[i]++;
+				c = false;
+				break;
+			}
 		}
+		if (c) digits.push_back(1);
 
-		if (i == digits.begin() && *i == 9)
-		{
-			*i = 0;
-
-			vector<int> ret(digits.size() + 1, 0);
-
-			ret[0] = 1;
-			copy(digits.begin(), digits.end(), ret.begin() + 1);
-			
-			return ret;
-		}
-		else
-		{
-			(*i)++;
-			return digits;
-		}
+		reverse(digits.begin(), digits.end());
+		return digits;
 	}
 };
 
 int main()
 {
-	Solution solution;
-
-	int len;
-	vector<int> input;
-
-	cin >> len;
-	while (len--)
-	{
-		int digit;
-		cin >> digit;
-		input.push_back(digit);
-	}
-	
-	vector<int> output = solution.plusOne(input);
-
-	for (auto i = output.begin(); i != output.end(); i++)
-	{
-		cout << *i;
-	}
-
 	while (getchar());
 
 	return 0;
