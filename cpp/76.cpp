@@ -13,60 +13,42 @@ class Solution
 public:
 	string minWindow(string s, string t)
 	{
-		int chrs[128] = { 0 };
-		int cnts[128] = { 0 };
-		queue<int> idxs;
+		int cnts[CHAR_MAX] = { 0 };
+		int len = INT_MAX, idx = -1, total = 0;
 
-		int len = INT_MAX, idx = -1, cnt = 0;
-
-		for (auto c : t) { chrs[c]++; }
-
-		for (int i = 0; i < s.size(); i++)
+		for (auto c : t)
 		{
-			if (chrs[s[i]])
+			total += cnts[c] == 0;
+			cnts[c]++;
+		}
+		for (int i = 0, j = 0; i < s.size(); i++)
+		{
+			cnts[s[i]]--;
+			if (cnts[s[i]] == 0)
 			{
-				if (cnts[s[i]] < chrs[s[i]]) cnt++;
-				cnts[s[i]]++;
-				idxs.push(i);
-
-				if (cnt == t.size())
+				total--;
+				if (total == 0)
 				{
-					char c = s[idxs.front()];
-					while (cnts[c] > chrs[c])
+					while (cnts[s[j]] < 0)
 					{
-						idxs.pop();
-						cnts[c]--;
-						c = s[idxs.front()];
+						cnts[s[j++]]++;
 					}
-
-					int l = i - idxs.front() + 1;
-					if (l < len)
+					if (i - j < len)
 					{
-						len = l;
-						idx = idxs.front();
+						len = i - j;
+						idx = j;
 					}
-
-					do
-					{
-						c = s[idxs.front()];
-						cnts[c]--;
-						idxs.pop();
-					}
-					while (cnts[c] >= chrs[c]);
-					cnt--;
+					cnts[s[j++]]++;
+					total++;
 				}
 			}
 		}
-		return idx == -1 ? "" : s.substr(idx, len);
+		return idx == -1 ? "" : s.substr(idx, len + 1);
 	}
 };
 
 int main()
 {
-	Solution solution;
-
-	solution.minWindow("bba", "ab");
-
 	while (getchar());
 
 	return 0;

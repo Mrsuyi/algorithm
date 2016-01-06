@@ -10,61 +10,47 @@ using namespace std;
 class Solution
 {
 public:
-	vector<vector<char>> bd;
-	string wd;
-	vector<vector<bool>> visited;
-	int m_max, n_max, last;
+	vector<vector<char>> board;
+	string word;
+	int len, m, n;
 
 	bool exist(vector<vector<char>>& board, string word)
 	{
-		bd = board;
-		wd = word;
+		this->m = board.size();
+		this->n = board[0].size();
+		this->word = word;
+		this->len = word.size();
+		this->board = board;
 
-		m_max = board.size();
-		n_max = board[0].size();
-		last = word.length() - 1;
-
-		visited = vector<vector<bool>>(m_max, vector<bool>(n_max, false));
-
-		for (int i = 0; i < m_max; i++)
-		for (int j = 0; j < n_max; j++)
+		for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++)
 		{
-			if (dfs(i, j, 0)) return true;
+			if (dfs(0, i, j)) return true;
 		}
-
 		return false;
 	}
 
-	bool dfs(int m, int n, int idx)
+	bool dfs(int idx, int row, int col)
 	{
-		if (idx == last)
-		{
-			return bd[m][n] == wd[idx];
-		}
-		else if (bd[m][n] == wd[idx])
-		{
-			visited[m][n] = true;
+		if (idx == len - 1) return board[row][col] == word[idx];
+		if (board[row][col] != word[idx]) return false;
 
-			int _n = n - 1;
-			int n_ = n + 1;
-			int _m = m - 1;
-			int m_ = m + 1;
+		char c = board[row][col];
+		board[row][col] = '#';
 
-			idx++;
+		int _row = row - 1;
+		int row_ = row + 1;
+		int _col = col - 1;
+		int col_ = col + 1;
 
-			bool search = (_n >= 0    && !visited[m][_n] && dfs(m, _n, idx))
-		               || (n_ < n_max && !visited[m][n_] && dfs(m, n_, idx))
-				       || (_m >= 0    && !visited[_m][n] && dfs(_m, n, idx))
-					   || (m_ < m_max && !visited[m_][n] && dfs(m_, n, idx));
+		bool ret = (_col >= 0 && dfs(idx + 1, row, _col))
+			    || (col_ < n  && dfs(idx + 1, row, col_))
+			    || (_row >= 0 && dfs(idx + 1, _row, col))
+			    || (row_ < m  && dfs(idx + 1, row_, col));
 
-			visited[m][n] = false;
+		board[row][col] = c;
 
-			return search;
-		}
-		else
-		{
-			return false;
-		}
+		return ret;
 	}
 };
 

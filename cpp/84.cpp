@@ -21,24 +21,44 @@ public:
 		int len = height.size();
 		int ret = 0;
 		stack<int> idxs;
+		idxs.push(0);
 
-		for (int i = 0; i < len; i++)
+		for (int i = 1; i < len; i++)
 		{
-			if (idxs.empty())
+			while (!idxs.empty() && height[idxs.top()] > height[i])
 			{
-				ret = max(ret, height[i] * (i + 1));
-			}
-			else
-			{
-				while (!idxs.empty() && height[idxs.top()] > height[i])
-				{
-					int h = height[idxs.top()];
-					idxs.pop();
-					int w = idxs.empty() ? i : i - idxs.top() - 1;
-					ret = max(ret, h * w);
-				}
+				int h = height[idxs.top()];
+				idxs.pop();
+				int w = idxs.empty() ? i : i - idxs.top() - 1;
+				ret = max(ret, h * w);
 			}
 			idxs.push(i);
+		}
+		return ret;
+	}
+};
+
+class Solution
+{
+public:
+	int largestRectangleArea(vector<int>& height)
+	{
+		height.push_back(0);
+		int len = height.size();
+		int ret = height[0];
+
+		for (int i = 1; i < len; i++)
+		{
+			if (height[i - 1] > height[i])
+			{
+				int j = i - 1;
+				while (j >= 0 && height[j] > height[i])
+				{
+					ret = max(ret, height[j] * (i - j));
+					height[j] = height[i];
+					j--;
+				}
+			}
 		}
 		return ret;
 	}

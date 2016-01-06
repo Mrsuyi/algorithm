@@ -15,37 +15,32 @@ public:
 		int m = matrix.size();
 		int n = matrix[0].size();
 
-		// get row
-		int l = 0, r = m, mid = (l + r) / 2;
-		while (l != mid)
+		int l = 0, r = m - 1;
+		while (l <= r)
 		{
-			if (matrix[mid][0] == target) return true;
+			int mid = l + (r - l) / 2;
 
-			if (matrix[mid][0] > target) r = mid; else l = mid;
-
-			mid = (l + r) / 2;
+			if (matrix[mid][0] == target)
+			{
+				return true;
+			}
+			else if (matrix[mid][0] > target)
+			{
+				r = mid - 1;
+			}
+			else
+			{
+				l = mid + 1;
+			}
 		}
-		if (matrix[l][0] == target) return true;
+		if (l == 0) return false;
 
-		// get col
-		int row = l;
-		return binary_search(matrix[l].begin(), matrix[l].end(), target);
+		return binary_search(matrix[l - 1].begin(), matrix[l - 1].end(), target);
 	}
 };
 
 int main()
 {
-	Solution solution;
-
-	vector<vector<int>> matrix =
-	{
-		{1, 3, 5, 7},
-		{10, 11, 16, 20},
-		{23, 30, 34, 50}
-	};
-
-	cout << solution.searchMatrix(matrix, 8);
-
 	while (getchar());
 
 	return 0;

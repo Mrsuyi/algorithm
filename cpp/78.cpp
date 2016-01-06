@@ -13,9 +13,8 @@ public:
 	vector<vector<int>> subsets(vector<int>& nums)
 	{
 		sort(nums.begin(), nums.end());
-
 		vector<vector<int>> ret;
-		
+
 		int len = nums.size();
 		int cnt = 1 << len;
 		for (int i = 0; i < cnt; i++)
@@ -23,7 +22,7 @@ public:
 			vector<int> v;
 			for (int j = 0; j < len; j++)
 			{
-				if (i & 1 << j)
+				if (i & (1 << j))
 				{
 					v.push_back(nums[j]);
 				}

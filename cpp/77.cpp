@@ -14,9 +14,7 @@ public:
 	{
 		vector<vector<int>> ret;
 		vector<int> prefix;
-
 		dfs(ret, prefix, 1, n, k);
-
 		return ret;
 	}
 

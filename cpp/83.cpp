@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
+#include <stack>
 #include <string>
+#include <unordered_map>
+#include <algorithm>
 
 using namespace std;
 
@@ -16,21 +19,19 @@ class Solution
 public:
 	ListNode* deleteDuplicates(ListNode* head)
 	{
-		ListNode* pre = head;
-		ListNode* cur = head;
+		ListNode* i = head;
 
-		while (cur)
+		while (i)
 		{
-			do
+			if (i->next && i->next->val == i->val)
 			{
-				cur = cur->next;
+				i->next = i->next->next;
 			}
-			while (cur && cur->val == pre->val);
-
-			pre->next = cur;
-			pre = cur;
+			else
+			{
+				i = i->next;
+			}
 		}
-
 		return head;
 	}
 };
@@ -38,29 +39,6 @@ public:
 int main()
 {
 	Solution solution;
-
-	int count;
-
-	ListNode* head = new ListNode(0);
-	ListNode* pre = head;
-
-	cin >> count;
-	while (count--)
-	{
-		int input;
-		cin >> input;
-		ListNode* cur = new ListNode(input);
-		pre->next = cur;
-		pre = cur;
-	}
-
-	head = solution.deleteDuplicates(head->next);
-
-	while (head)
-	{
-		cout << head->val << ' ';
-		head = head->next;
-	}
 
 	while (getchar());
 
