@@ -12,11 +12,9 @@ class Solution
 public:
 	vector<int> grayCode(int n)
 	{
-		if (n == 0) return { 0 };
+		vector<int> ret = { 0 };
 
-		vector<int> ret = { 0, 1 };
-
-		for (int i = 1; i < n; i++)
+		for (int i = 0; i < n; i++)
 		{
 			int base = 1 << i;
 
@@ -25,7 +23,6 @@ public:
 				ret.push_back(base | (ret[j]));
 			}
 		}
-
 		return ret;
 	}
 };

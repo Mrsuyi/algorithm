@@ -12,33 +12,23 @@ struct TreeNode
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-class Solution {
+class Solution
+{
 public:
-	bool Symmetric(TreeNode* left, TreeNode* right)
-	{
-		if (left == NULL)
-		{
-			return right == NULL;
-		}
-		else
-		{
-			if (right == NULL)
-			{
-				return false;
-			}
-			else
-			{
-				return left->val == right->val
-					&& Symmetric(left->left, right->right)
-					&& Symmetric(left->right, right->left);
-			}
-		}
-	}
-
-	bool isSymmetric(TreeNode* root)
-	{
-		return root == NULL ? true : Symmetric(root->left, root->right);
-	}
+    bool isSymmetric(TreeNode* root)
+    {
+        return root ? symmetric(root->left, root->right) : true;
+    }
+    
+    bool symmetric(TreeNode* p, TreeNode* q)
+    {
+        return q == p
+            || p
+            && q
+            && p->val == q->val
+            && symmetric(p->left, q->right)
+            && symmetric(p->right, q->left);
+    }
 };
 
 int main()

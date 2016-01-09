@@ -30,13 +30,10 @@ public:
 		if (l == r) return { new TreeNode(l) };
 
 		vector<TreeNode*> ret;
-		for (int i = l + 1; i < r; i++)
+		for (int i = l; i <= r; i++)
 		{
-			vector<TreeNode*> left = generate(l, i - 1);
-			vector<TreeNode*> right = generate(i + 1, r);
-
-			for (auto n_l : left)
-			for (auto n_r : right)
+			for (auto n_l : generate(l, i - 1))
+			for (auto n_r : generate(i + 1, r))
 			{
 				TreeNode* root = new TreeNode(i);
 				root->left = n_l;

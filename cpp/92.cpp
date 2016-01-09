@@ -19,33 +19,31 @@ class Solution
 public:
 	ListNode* reverseBetween(ListNode* head, int m, int n)
 	{
-		if (!head && !head->next) return head;
-
 		ListNode* ret = new ListNode(0);
 		ret->next = head;
 
-		ListNode* _m = ret;
+		ListNode* pre = ret;
+		int k = m;
 
-		int mov = m - 1;
-		while (mov--)
+		while (--k)
 		{
-			_m = _m->next;
+			pre = pre->next;
 		}
 
-		ListNode* pre = _m->next;
-		ListNode* i = pre->next;
-
-		int cnt = n - m;
-		while (cnt--)
+		ListNode* l = pre->next;
+		ListNode* r = pre->next->next;
+		k = n - m;
+		
+		while (k--)
 		{
-			ListNode* tmp = i->next;
-			i->next = pre;
-			pre = i;
-			i = tmp;
+			ListNode* tmp = r->next;
+			r->next = l;
+			l = r;
+			r = tmp;
 		}
 
-		_m->next->next = i;
-		_m->next = pre;
+		pre->next->next = r;
+		pre->next = l;
 
 		return ret->next;
 	}
