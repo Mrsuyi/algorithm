@@ -20,45 +20,24 @@ class Solution
 public:
 	TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder)
 	{
-		int pr_len = preorder.size();
-		int in_len = inorder.size();
-
-		if (pr_len == 0) return NULL;
-
-		// in [num]=>[idx]
-		unordered_map<int, int> in;
-		// [pr-num]=>[in-idx]
-		unordered_map<int, int> pr_2_in;
-
-		for (int i = 0; i < pr_len; i++)
+		unordered_map<int, int> map;
+		for (int i = 0; i < inorder.size(); i++)
 		{
-			in[inorder[i]] = i;
+			map[inorder[i]] = i;
 		}
-		for (int i = 0; i < in_len; i++)
-		{
-			pr_2_in[preorder[i]] = in[preorder[i]];
-		}
-
-		return build(pr_2_in, preorder, 0, preorder.size() - 1, inorder, 0, inorder.size() - 1);
+		return build(preorder, map, 0, 0, inorder.size());
 	}
 
-	TreeNode* build(unordered_map<int, int>& pr_2_in, vector<int>& pr, int pr_l, int pr_r, vector<int>& in, int in_l, int in_r)
+	TreeNode* build(vector<int>& pre, unordered_map<int, int>& map, int idx, int offset, int cnt)
 	{
-		int mid = pr[pr_l];
-		int i = pr_2_in[mid];
+		if (cnt <= 0) return NULL;
+		
+		TreeNode* ret = new TreeNode(pre[idx]);
+		
+		int l = map[pre[idx]] - idx + offset;
+		ret->left = build(pre, map, idx + 1, offset + 1, l);
+		ret->right = build(pre, map, idx + l + 1, offset, cnt - l - 1);
 
-		TreeNode* ret = new TreeNode(mid);
-
-		if (i != in_l)
-		{
-			int len = i - in_l;
-			ret->left = build(pr_2_in, pr, pr_l + 1, pr_l + len, in, in_l, i - 1);
-		}
-		if (i < in_r)
-		{
-			int len = i - in_l;
-			ret->right = build(pr_2_in, pr, pr_l + len + 1, pr_r, in, i + 1, in_r);
-		}
 		return ret;
 	}
 };

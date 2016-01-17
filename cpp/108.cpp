@@ -27,9 +27,8 @@ public:
 	TreeNode* build(vector<int>& nums, int l, int r)
 	{
 		if (l > r) return NULL;
-		if (l == r) return new TreeNode(nums[l]);
 
-		int mid = (l + r) / 2 + (l + r) % 2;
+		int mid = (l + r + 1) / 2;
 
 		TreeNode* ret = new TreeNode(nums[mid]);
 		ret->left = build(nums, l, mid - 1);

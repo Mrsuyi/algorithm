@@ -12,40 +12,38 @@ struct TreeNode
 	TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-class Solution {
+class Solution
+{
 public:
 	vector<vector<int>> levelOrderBottom(TreeNode* root)
 	{
-		if (root == NULL) return{};
-
 		int d = depth(root);
-
 		vector<vector<int>> ret(d);
+		vector<TreeNode*> nodes;
+		vector<TreeNode*> tmp;
 
-		dfs(ret, root, 0);
+		nodes.push_back(root);
 
+		for (int i = 0; i < d; i++)
+		{
+			tmp.clear();
+
+			for (int j = 0; j < nodes.size(); j++)
+			{
+				ret[i].push_back(nodes[j]->val);
+				if (nodes[j]->left) { tmp.push_back(nodes[j]->left); }
+				if (nodes[j]->right) { tmp.push_back(nodes[j]->right); }
+			}
+			swap(nodes, tmp);
+		}
 		reverse(ret.begin(), ret.end());
-
 		return ret;
-	}
-
-	void dfs(vector<vector<int>>& ret, TreeNode* node, int level)
-	{
-		if (node == NULL) return;
-
-		ret[level].push_back(node->val);
-		dfs(ret, node->left, level + 1);
-		dfs(ret, node->right, level + 1);
 	}
 
 	int depth(TreeNode* node)
 	{
-		if (node == NULL) return 0;
-
-		int left = depth(node->left);
-		int right = depth(node->right);
-
-		return (left > right ? left : right) + 1;
+		if (!node) return 0;
+		return max(depth(node->left), depth(node->right)) + 1;
 	}
 };
 
