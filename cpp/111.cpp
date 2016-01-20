@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -12,37 +13,28 @@ struct TreeNode
 	TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-class Solution {
+class Solution
+{
 public:
 	int minDepth(TreeNode* root)
 	{
-		if (root == NULL) return 0;
+		if (!root) return 0;
 
 		int ret = 1;
-
-		vector<TreeNode*> bfs;
-
+		vector<TreeNode*> bfs, tmp;
 		bfs.push_back(root);
 
-		while (true)
+		while (!bfs.empty())
 		{
-			vector<TreeNode*> temp;
-
-			for (auto node : bfs)
+			tmp.clear();
+			for (int i = 0; i < bfs.size(); i++)
 			{
-				if (node->left == NULL && node->right == NULL)
-				{
-					return ret;
-				}
-				else
-				{
-					if (node->left != NULL) temp.push_back(node->left);
-					if (node->right != NULL) temp.push_back(node->right);
-				}
+				if (!bfs[i]->left && !bfs[i]->right) return ret;
+				if (bfs[i]->left) { tmp.push_back(bfs[i]->left); }
+				if (bfs[i]->right) { tmp.push_back(bfs[i]->right); }
 			}
-
+			swap(bfs, tmp);
 			ret++;
-			bfs = temp;
 		}
 	}
 };
@@ -50,6 +42,7 @@ public:
 int main()
 {
 	Solution solution;
+
 
 	return 0;
 }

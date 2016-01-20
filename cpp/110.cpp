@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -12,39 +13,24 @@ struct TreeNode
 	TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-class Solution {
+class Solution
+{
 public:
-	bool balance = true;
-
 	bool isBalanced(TreeNode* root)
 	{
-		if (root == NULL) return true;
-
-		balance = true;
-		depth(root);
-
-		return balance;
+		return balanced(root) != -1;
 	}
 
-	int depth(TreeNode* node)
+	int balanced(TreeNode* root)
 	{
-		if (node == NULL) return 0;
+		if (!root) return 0;
 
-		int left = depth(node->left);
-		if (!balance) return 0;
+		int l = balanced(root->left);
+		int r = balanced(root->right);
+		
+		if (l == -1 || r == -1 || abs(l - r) > 1) return -1;
 
-		int right = depth(node->right);
-		if (!balance) return 0;
-
-		if (left - right > 1 || right - left > 1)
-		{
-			balance = false;
-			return 0;
-		}
-
-		int depth = (left > right ? left : right) + 1;
-
-		return depth;
+		return max(l, r) + 1;
 	}
 };
 

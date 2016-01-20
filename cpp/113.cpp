@@ -22,24 +22,20 @@ public:
 	{
 		vector<vector<int>> ret;
 		vector<int> prefix;
-
 		dfs(ret, prefix, root, sum);
-
 		return ret;
 	}
 
 	void dfs(vector<vector<int>>& ret, vector<int>& prefix, TreeNode* node, int sum)
 	{
 		if (!node) return;
-
 		if (!node->left && !node->right && node->val == sum)
 		{
-			vector<int> v = vector<int>(prefix);
+			vector<int> v = prefix;
 			v.push_back(sum);
 			ret.push_back(v);
 			return;
 		}
-
 		prefix.push_back(node->val);
 		dfs(ret, prefix, node->left, sum - node->val);
 		dfs(ret, prefix, node->right, sum - node->val);
