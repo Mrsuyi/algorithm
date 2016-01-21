@@ -7,37 +7,21 @@ using namespace std;
 class Solution
 {
 public:
-	inline char character(char c)
+	char character(char c)
 	{
-		if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z'))
-		{
-			return c;
-		}
-		else if (c >= 'A' && c <= 'Z')
-		{
-			return c - 'A' + 'a';
-		}
-		else
-		{
-			return 0;
-		}
+		return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') ? c :
+			   (c >= 'A' && c <= 'Z') ? c - 'A' + 'a' : 0;
 	}
 
 	bool isPalindrome(string s)
 	{
-		for (int i = 0, j = s.size() - 1; i < j; i++, j--)
+		int len = s.size() - 1;
+		for (int l = 0, r = len; l < r; l++, r--)
 		{
-			char left, right;
+			while (l < len && !character(s[l])) l++;
+			while (r >= 0 && !character(s[r])) r--;
 
-			for (; i < j && !(left = character(s[i])); i++) {}
-			
-			if (i == j) return true;
-			
-			for (; i < j && !(right = character(s[j])); j--) {}
-
-			if (i == j) return true;
-
-			if (left != right) return false;
+			if (l < r && character(s[l]) != character(s[r])) return false;
 		}
 
 		return true;

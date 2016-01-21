@@ -9,22 +9,22 @@ using namespace std;
 
 class Solution
 {
-private:
-	inline int min(const int a, const int b) { return a < b ? a : b; };
 public:
 	int minimumTotal(vector<vector<int>>& triangle)
 	{
-		int levels = triangle.size();
+		vector<int> dp(triangle.size() + 1, INT_MAX);
+		vector<int> tmp(triangle.size() + 1, INT_MAX);
 
-		for (int i = levels - 2; i >= 0; i--)
+		dp[1] = 0;
+		for (int i = 0; i < triangle.size(); i++)
 		{
-			for (int j = 0; j <= i; j++)
+			for (int j = 1; j <= i + 1; j++)
 			{
-				triangle[i][j] += min(triangle[i + 1][j], triangle[i + 1][j + 1]);
+				tmp[j] = triangle[i][j - 1] + min(dp[j], dp[j - 1]);
 			}
+			swap(dp, tmp);
 		}
-
-		return triangle[0][0];
+		return *min_element(dp.begin(), dp.end());
 	}
 };
 

@@ -22,7 +22,8 @@ public:
 	int maxPathSum(TreeNode* root)
 	{
 		int ret = INT_MIN;
-		return max(search(root, ret), ret);
+        search(root, ret);
+        return ret;
 	}
 
 	int search(TreeNode* node, int& ret)

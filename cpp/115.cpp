@@ -7,38 +7,20 @@
 
 using namespace std;
 
-// Mrsuyi
 class Solution
 {
 public:
 	int numDistinct(string s, string t)
 	{
-		int l1 = s.size();
-		int l2 = t.size();
-		if (l1 == 0 || l2 == 0) return 0;
+		vector<vector<int>> dp(t.size() + 1, vector<int>(s.size() + 1, 0));
+		fill(dp[0].begin(), dp[0].end(), 1);
 
-		vector<int> dp(l1);
-
-		for (int i = 0; i < l2; i++)
+		for (int i = 1; i <= t.size(); i++)
+		for (int j = 1; j <= s.size(); j++)
 		{
-			vector<int> tmp(l1, 0);
-			for (int j = 0, cnt = i == 0; j < l1; j++)
-			{
-				if (cnt && s[j] == t[i])
-				{
-					tmp[j] = cnt;
-				}
-				cnt += dp[j];
-			}
-			dp = tmp;
+			dp[i][j] = dp[i][j - 1] + (t[i - 1] == s[j - 1] ? dp[i - 1][j - 1] : 0);
 		}
-		
-		int ret = 0;
-		for (int n : dp)
-		{
-			ret += n;
-		}
-		return ret;
+		return dp[t.size()][s.size()];
 	}
 };
 
