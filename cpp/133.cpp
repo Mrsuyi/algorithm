@@ -16,6 +16,7 @@ struct UndirectedGraphNode
 	UndirectedGraphNode(int x) : label(x) {};
 };
 
+// DFS
 class Solution
 {
 public:
@@ -43,6 +44,39 @@ public:
 			}
 			copy->neighbors.push_back(map[n->label]);
 		}
+	}
+};
+
+// BFS
+class Solution
+{
+public:
+	UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node)
+	{
+		if (!node) return nullptr;
+
+		unordered_map<int, UndirectedGraphNode*> map;
+		queue<UndirectedGraphNode*> q;
+
+		map[node->label] = new UndirectedGraphNode(node->label);
+		q.push(node);
+		
+		while (!q.empty())
+		{
+			UndirectedGraphNode* node = q.front();
+			q.pop();
+			
+			for (auto n : node->neighbors)
+			{
+				if (map.find(n->label) == map.end())
+				{
+					map[n->label] = new UndirectedGraphNode(n->label);
+					q.push(n);
+				}
+				map[node->label]->neighbors.push_back(map[n->label]);
+			}
+		}
+		return map[node->label];
 	}
 };
 
