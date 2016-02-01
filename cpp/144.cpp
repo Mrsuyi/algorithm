@@ -24,24 +24,44 @@ public:
 	vector<int> preorderTraversal(TreeNode* root)
 	{
 		vector<int> ret;
-		stack<TreeNode*> st;
+		stack<TreeNode*> stk;
 
-		st.push(root);
+		stk.push(root);
 
-		while (!st.empty())
+		while (!stk.empty())
 		{
-			TreeNode* b = st.top();
-			st.pop();
+			TreeNode* b = stk.top();
+			stk.pop();
 
 			if (b)
 			{
 				ret.push_back(b->val);
-				st.push(b->right);
-				st.push(b->left);
+				stk.push(b->right);
+				stk.push(b->left);
 			}
 		}
 
 		return ret;
+	}
+};
+
+class Solution
+{
+public:
+	vector<int> preorderTraversal(TreeNode* root)
+	{
+		vector<int> ret;
+		dfs(ret, root);
+		return ret;
+	}
+
+	void dfs(vector<int>& ret, TreeNode* node)
+	{
+		if (!node) return;
+
+		ret.push_back(node->val);
+		dfs(ret, node->left);
+		dfs(ret, node->right);
 	}
 };
 

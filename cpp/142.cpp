@@ -24,7 +24,6 @@ public:
 		ListNode* slow = head;
 		ListNode* fast = head;
 
-		ListNode* mark;
 		while (fast && fast->next)
 		{
 			slow = slow->next;
