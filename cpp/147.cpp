@@ -22,22 +22,19 @@ class Solution
 public:
 	ListNode* insertionSortList(ListNode* head)
 	{
-		vector<int> nums;
+		ListNode* ret = new ListNode(INT_MIN);
 
 		while (head)
 		{
-			nums.push_back(head->val);
+			ListNode* i = ret;
+			while (i->next && i->next->val < head->val)
+			{
+				i = i->next;
+			}
+			ListNode* insert = new ListNode(head->val);
+			insert->next = i->next;
+			i->next = insert;
 			head = head->next;
-		}
-
-		sort(nums.begin(), nums.end());
-
-		ListNode* ret = new ListNode(0);
-		ListNode* i = ret;
-		for (int n : nums)
-		{
-			i->next = new ListNode(n);
-			i = i->next;
 		}
 
 		return ret->next;
