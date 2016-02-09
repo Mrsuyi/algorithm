@@ -1,79 +1,54 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
-class MinStack {
-public:
+class MinStack
+{
+private:
 	struct Node
 	{
 		int val;
-		int min;
-		Node* pre;
+		int mim;
 		Node* nxt;
 
-		Node(int x, int m) : val(x), pre(NULL), nxt(NULL)
+		Node(int v, Node* n, int m) : val(v), nxt(n)
 		{
-			min = x < m ? x : m;
+			mim = min(v, m);
 		}
 	};
 
-	Node* head;
-	Node* tail;
+	Node* ptop = new Node(INT_MAX, nullptr, INT_MAX);
 
+public:
 	void push(int x)
 	{
-		tail->nxt = new Node(x, tail->min);
-		tail->nxt->pre = tail;
-		tail = tail->nxt;
+		Node* n = new Node(x, ptop, ptop->mim);
+		ptop = n;
 	}
 
 	void pop()
 	{
-		tail = tail->pre;
-		delete tail->nxt;
-		tail->nxt = NULL;
+		Node* tmp = ptop->nxt;
+		delete ptop;
+		ptop = tmp;
 	}
 
 	int top()
 	{
-		return tail->val;
+		return ptop->val;
 	}
 
 	int getMin()
 	{
-		return tail->min;
-	}
-
-	MinStack()
-	{
-		head = new Node(INT_MAX, INT_MAX);
-		tail = head;
-
-		head->nxt = tail;
-		tail->pre = head;
+		return ptop->mim;
 	}
 };
 
 int main()
 {
-	MinStack stack;
-
-	stack.push(2);
-	stack.push(0);
-	stack.push(3);
-	stack.push(0);
-
-	cout << stack.getMin() << endl;
-	stack.pop();
-	cout << stack.getMin() << endl;
-	stack.pop();
-	cout << stack.getMin() << endl;
-	stack.pop();
-	cout << stack.getMin() << endl;
-	stack.pop();
-
 	while (getchar());
 
 	return 0;

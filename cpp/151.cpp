@@ -15,20 +15,18 @@ class Solution
 public:
 	void reverseWords(string &s)
 	{
-		// divide
 		stack<string> words;
 		int len = s.length();
 		for (int i = 0; i < len; i++)
 		{
 			if (s[i] != ' ')
 			{
-				string word;
-				while (i < len && s[i] != ' ') { word += s[i++]; }
-				words.push(word);
+				int bgn = i++;
+				while (i < len && s[i] != ' ') i++;
+				words.push(s.substr(bgn, i - bgn));
 			}
 		}
 
-		// concatenate
 		string ret;
 		while (!words.empty())
 		{

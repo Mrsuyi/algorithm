@@ -15,47 +15,32 @@ class Solution
 public:
 	int evalRPN(vector<string>& tokens)
 	{
-		stack<int> operands;
-		stack<char> operators;
+		stack<int> stk;
 
-		for (string& str : tokens)
+		for (auto& str : tokens)
 		{
-			char c = str[0];
-			int len = str.length();
-			if (len == 1 && (c == '+' || c == '-' || c == '*' || c == '/'))
+			if (str.size() == 1 && str[0] < '0')
 			{
-				int r = operands.top();
-				operands.pop();
-				int l = operands.top();
-				operands.pop();
+				int b = stk.top();
+				stk.pop();
+				int a = stk.top();
+				stk.pop();
 
-				switch (c)
+				switch (str[0])
 				{
-					case '+': operands.push(l + r); break;
-					case '-': operands.push(l - r); break;
-					case '*': operands.push(l * r); break;
-					case '/': operands.push(l / r); break;
+				case '+': stk.push(a + b); break;
+				case '-': stk.push(a - b); break;
+				case '*': stk.push(a * b); break;
+				case '/': stk.push(a / b); break;
 				}
 			}
 			else
 			{
-				int i = 0;
-				int n = 0;
-				bool minus = false;
-				if (c == '-')
-				{
-					i++;
-					minus = true;
-				}
-				for (; i < len; i++)
-				{
-					n = 10 * n + (str[i] - '0');
-				}
-				operands.push(minus ? -n : n);
+				stk.push(stoi(str));
 			}
 		}
 
-		return operands.top();
+		return stk.top();
 	}
 };
 

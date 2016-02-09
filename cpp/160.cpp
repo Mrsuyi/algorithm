@@ -6,9 +6,9 @@ using namespace std;
 
 struct ListNode
 {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
+	int val;
+	ListNode *next;
+	ListNode(int x) : val(x), next(NULL) {}
 };
 
 class Solution
@@ -23,32 +23,27 @@ public:
 
 		while (true)
 		{
-			if (ia == NULL)
-			{
-				ia = headB;
-			}
-
-			if (ib == NULL)
-			{
-				ib = headA;
-			}
+			if (ia == ib) return ia;
 
 			if (ia->next == NULL)
 			{
 				ea = ia;
+				ia = headB;
 			}
-
+			else
+			{
+				ia = ia->next;
+			}
 			if (ib->next == NULL)
 			{
 				eb = ib;
+				ib = headA;
 			}
-
+			else
+			{
+				ib = ib->next;
+			}
 			if (ea != NULL && eb != NULL && ea != eb) return NULL;
-
-			if (ia == ib) return ia;
-
-			ia = ia->next;
-			ib = ib->next;
 		}
 	}
 };

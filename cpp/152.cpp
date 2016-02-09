@@ -15,37 +15,19 @@ class Solution
 public:
 	int maxProduct(vector<int>& nums)
 	{
-		int len = nums.size();
-		if (len == 0) return 0;
-
+		if (nums.size() == 1) return nums[0];
 		int ret = INT_MIN;
-		int mul = 1;
-		int mul_m = 0;
+		int mx = 0, mi = 0;
 
 		for (int n : nums)
 		{
-			if (n == 0)
-			{
-				if (0 > ret) ret = 0;
-				mul = 1;
-				mul_m = 0;
-			}
-			else
-			{
-				if (mul < 0 && mul_m == 0)
-				{
-					mul_m = 1;
-				}
-				if (mul_m != 0)
-				{
-					mul_m *= n;
-					if (mul_m > ret) ret = mul_m;
-				}
-
-				mul *= n;
-				if (mul > ret) ret = mul;
-			}
+			int tx = mx * n;
+			int ti = mi * n;
+			mx = max(n, max(tx, ti));
+			mi = min(n, min(tx, ti));
+			ret = max(ret, mx);
 		}
+
 		return ret;
 	}
 };
