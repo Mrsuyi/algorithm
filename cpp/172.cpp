@@ -10,34 +10,18 @@ class Solution
 public:
 	int trailingZeroes(int n)
 	{
-		int ret = 0;
-		int div = 5;
-
-		int quo;
-
-		do
+		int cnt = 0;
+		while (n)
 		{
-			quo = n / div;
-			ret += quo;
-			div *= 5;
+			cnt += n / 5;
+			n /= 5;
 		}
-		while (quo >= 5);
-
-		return ret;
+		return cnt;
 	}
 };
 
 int main()
 {
-	Solution solution;
-
-	int input;
-
-	while (cin >> input)
-	{
-		cout << solution.trailingZeroes(input) << endl;
-	}
-
 	while (getchar());
 
 	return 0;

@@ -1,6 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <stack>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <algorithm>
+#include <queue>
+#include <deque>
 
 using namespace std;
 
@@ -11,12 +17,12 @@ public:
 	{
 		string ret;
 
-		while (n > 0)
+		while (n)
 		{
-			ret += ((n - 1) % 26) + 'A';
-			n = (n - 1) / 26;
+			n--;
+			ret += n % 26 + 'A';
+			n /= 26;
 		}
-
 		reverse(ret.begin(), ret.end());
 
 		return ret;
@@ -26,13 +32,6 @@ public:
 int main()
 {
 	Solution solution;
-
-	int input;
-
-	while (cin >> input)
-	{
-		cout << solution.convertToTitle(input) << endl;
-	}
 
 	while (getchar());
 

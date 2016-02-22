@@ -11,28 +11,16 @@ public:
 	int titleToNumber(string s)
 	{
 		int ret = 0;
-
-		for (auto i = s.begin(); i != s.end(); i++)
+		for (char c : s)
 		{
-			ret *= 26;
-			ret += *i - 'A' + 1;
+			ret = ret * 26 + c - 'A' + 1;
 		}
-
 		return ret;
 	}
 };
 
 int main()
 {
-	Solution solution;
-
-	string input;
-
-	while (cin >> input)
-	{
-		cout << solution.titleToNumber(input) << endl;
-	}
-
 	while (getchar());
 
 	return 0;
