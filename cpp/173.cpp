@@ -20,19 +20,22 @@ struct TreeNode
 
 class BSTIterator
 {
-public:
-	TreeNode* node;
-
+private:
 	stack<TreeNode*> stk;
 
-	BSTIterator(TreeNode *root)
+	void move(TreeNode* node)
 	{
-		this->node = root;
 		while (node)
 		{
 			stk.push(node);
 			node = node->left;
 		}
+	}
+
+public:
+	BSTIterator(TreeNode *root)
+	{
+		move(root);
 	}
 
 	/** @return whether we have a next smallest number */
@@ -44,17 +47,71 @@ public:
 	/** @return the next smallest number */
 	int next()
 	{
-		int ret;
-		node = stk.top();
+		TreeNode* node = stk.top();
 		stk.pop();
-		ret = node->val;
-		node = node->right;
-		while (node)
+
+		if (node->right)
 		{
-			stk.push(node);
-			node = node->left;
+			move(node->right);
 		}
-		return ret;
+
+		return node->val;
+	}
+};
+
+// morris traverse
+
+class BSTIterator
+{
+private:
+	TreeNode* cur;
+
+public:
+	BSTIterator(TreeNode *root)
+	{
+		cur = root;
+	}
+
+	/** @return whether we have a next smallest number */
+	bool hasNext()
+	{
+		return cur != nullptr;
+	}
+
+	/** @return the next smallest number */
+	int next()
+	{
+		while (cur)
+		{
+			if (!cur->left)
+			{
+				int ret = cur->val;
+				cur = cur->right;
+				return ret;
+			}
+			else
+			{
+				TreeNode* pre = cur->left;
+
+				while (pre->right && pre->right != cur)
+				{
+					pre = pre->right;
+				}
+
+				if (pre->right == cur)
+				{
+					pre->right = nullptr;
+					int ret = cur->val;
+					cur = cur->right;
+					return ret;
+				}
+				else
+				{
+					pre->right = cur;
+					cur = cur->left;
+				}
+			}
+		}
 	}
 };
 

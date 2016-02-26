@@ -18,26 +18,6 @@ struct TreeNode
 	TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-#include <iostream>
-#include <vector>
-#include <stack>
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
-#include <algorithm>
-#include <queue>
-#include <deque>
-
-using namespace std;
-
-struct TreeNode
-{
-	int val;
-	TreeNode *left;
-	TreeNode *right;
-	TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-
 class Solution
 {
 public:
