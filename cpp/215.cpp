@@ -10,6 +10,32 @@
 
 using namespace std;
 
+//heap
+class Solution
+{
+public:
+	int findKthLargest(vector<int>& nums, int k)
+	{
+		int len = nums.size();
+		priority_queue<int, vector<int>, greater<int>> q;
+		
+		for (int i = 0; i < k; i++)
+		{
+			q.push(nums[i]);
+		}
+		for (int i = k; i < len; i++)
+		{
+			if (q.top() < nums[i])
+			{
+				q.pop();
+				q.push(nums[i]);
+			}
+		}
+
+		return q.top();
+	}
+};
+
 class Solution
 {
 private: 

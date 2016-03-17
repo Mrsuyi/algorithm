@@ -3,40 +3,42 @@
 #include <stack>
 #include <string>
 #include <unordered_map>
+#include <algorithm>
+#include <set>
+#include <queue>
+#include <unordered_set>
+#include <functional>
 
 using namespace std;
 
 bool isBadVersion(int version);
 
-class Solution {
+class Solution
+{
 public:
-    int firstBadVersion(int n)
+	int firstBadVersion(int n)
 	{
-		long long left = 1, right = n, mid = (left + right) / 2;
+		int l = 1, r = n, mid;
 
-		while (mid != left)
+		while (l < r)
 		{
+			mid = l + (r - l) / 2;
+
 			if (isBadVersion(mid))
 			{
-				right = mid - 1;
+				r = mid;
 			}
 			else
 			{
-				left = mid + 1;
+				l = mid + 1;
 			}
-			mid = (left + right) / 2;
 		}
-		
-		while (!isBadVersion(mid)) { mid++; };
-
-		return mid;
-    }
+		return l;
+	}
 };
 
 int main()
 {
-	Solution solution;
-
 	while (getchar());
 
 	return 0;

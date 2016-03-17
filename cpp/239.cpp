@@ -14,25 +14,33 @@ using namespace std;
 class Solution
 {
 public:
-	bool containsNearbyDuplicate(vector<int>& nums, int k)
+	vector<int> maxSlidingWindow(vector<int>& nums, int k)
 	{
 		int len = nums.size();
-		unordered_set<int> set;
+		if (len == 0 || len < k) return {};
+
+		vector<int> ret(len - k + 1);
+		deque<int> q;
 
 		for (int i = 0; i < len; i++)
 		{
-			if (i > k)
-			{
-				set.erase(nums[i - k - 1]);
+			if (!q.empty() && q.front() <= i - k)
+			{ 
+				q.pop_front();
 			}
-			if (set.count(nums[i]))
+			while (!q.empty() && nums[i] > nums[q.back()])
 			{
-				return true;
+				q.pop_back();
 			}
-			set.insert(nums[i]);
+			q.push_back(i);
+			
+			if (i >= k - 1)
+			{
+				ret[i - k + 1] = nums[q.front()];
+			}
 		}
 
-		return false;
+		return ret;
 	}
 };
 
