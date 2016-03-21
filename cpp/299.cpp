@@ -3,6 +3,11 @@
 #include <stack>
 #include <string>
 #include <unordered_map>
+#include <algorithm>
+#include <set>
+#include <queue>
+#include <unordered_set>
+#include <functional>
 
 using namespace std;
 
@@ -17,15 +22,13 @@ public:
 
 		for (int i = 0; i < secret.size(); i++)
 		{
-			cnt[secret[i] - '0']++;
-		}
-
-		for (int i = 0; i < secret.size(); i++)
-		{
 			if (guess[i] == secret[i])
 			{
-				cnt[guess[i] - '0']--;
 				bull++;
+			}
+			else
+			{
+				cnt[secret[i] - '0']++;
 			}
 		}
 
@@ -45,8 +48,6 @@ public:
 
 int main()
 {
-	Solution solution;
-
 	while (getchar());
 
 	return 0;
