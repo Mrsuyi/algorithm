@@ -6,8 +6,8 @@ class Solution(object):
         :rtype: List[int]
         """
         map = {}
-        for i in range(len(nums)) :
-            if target - nums[i] in map :
+        for i in range(len(nums)):
+            if target - nums[i] in map:
                 return [map[target - nums[i]], i]
-            else :
+            else:
                 map[nums[i]] = i
