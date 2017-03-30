@@ -2,7 +2,7 @@
 #include <climits>
 using namespace std;
 
-int gcd(int a, int b)
+long long gcd(long long a, long long b)
 {
 	if (a < b) return gcd(b, a);
 	if (b == 0) return a;
@@ -14,16 +14,19 @@ int main()
 	int n;
 	while (cin >> n)
 	{
-		int up = 1, dn = INT_MAX;
+		long long up = 1, dn = -1;
 		for (int i = 0; i < n; ++i)
 		{
-			int a, b;
+			long long a, b;
 			cin >> a >> b;
 			if (up % a != 0)
 				up *= a / gcd(up, a);
-			dn = gcd(dn, b);
+			if (dn == -1)
+				dn = b;
+			else
+				dn = gcd(dn, b);
 		}
-		int updn = gcd(up, dn);
+		long long updn = gcd(up, dn);
 		cout << (up / updn) << " " << (dn / updn) << endl;
 	}
 
