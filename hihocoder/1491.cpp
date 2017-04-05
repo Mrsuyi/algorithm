@@ -1,121 +1,116 @@
+
+//
+// Still WA, fuck.........
+//
+
 #include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
-int dp[1 << 20][5] = {0};
-struct Monster
-{
-    int h, a;
-    bool s;
-    Monster() : h(-1) {}
-    Monster(int h, int a, bool s) : h(h), a(a), s(s) {}
-};
-Monster monsters[6][6];
 int N, M;
+int monh[7][7] = {0};
+int mona[7][7] = {0};
+int dp[1 << 21][7] = {0};
+char map[7][7];
+int total = 0;
 int dx, dy;
-int mya;
+int myh, mya;
 int res = -1;
 int dirs[4][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
 int mark(int status, int x, int y)
 {
-    status |= 1 << (x * N + y);
+	return status | (1 << (x * N + y));
 }
 bool marked(int status, int x, int y)
 {
-    return status & (1 << (x * N + y));
+	return status & (1 << (x * N + y));
 }
-bool valid(int x, int y)
+int expand(int status, int x, int y)
 {
-    return x >= 0 && x < N && y >= 0 && y < M;
+	for (int i = 0; i < 4; ++i)
+	{
+		int p = x + dirs[i][0];
+		int q = y + dirs[i][1];
+		if (p >= 0 && p < N && q >= 0 && q < M)
+			status = mark(status, p, q);
+	}
+	return status;
 }
 
-void dfs(int status, int h, int round, int moncnt)
+void dfs(int status, int flipable, int hp, int round, int rest)
 {
-    if (dp[status][round] >= h)
-        return;
-    dp[status][round] = h;
-    
-    for (int i = 0; i < N; ++i)
-        for (int j = 0; j < M; ++j)
-            if (!marked(status, i, j))
-            {
-                bool ok = false;
-                for (int k = 0; k < 4 && !ok; ++k)
-                {
-                    int p = i + dirs[k][0];
-                    int q = j + dirs[k][1];
-                    ok = valid(p, q) && marked(status, p, q);
-                }
-                if (!ok) continue;
-                
-                if (monsters[i][j].h != -1)
-                {
-                    int r = round - 1;
-                    int myh = h;
-                    for (int monh = monsters[i][j].h; monh > 0; monh -= mya)
-                    {
-                        if (r > 0) --r;
-                        else myh -= monsters[i][j].a;
-                    }
-                    if (myh > 0)
-                    {
-                        int s = status;
-                        mark(s, i, j);
-                        if (--moncnt == 0)
-                            res = std::max(res, myh);
-                        else
-                            dfs(s, myh, monsters[i][j].s ? 5 : r, moncnt - 1);
-                    }
-                }
-                else
-                {
-                    int s = status;
-                    mark(s, i, j);
-                    dfs(s, h, std::max(0, round - 1), moncnt);
-                }
-            }
+	if (dp[status][round] >= hp)
+		return;
+	dp[status][round] = hp;
+	for (int i = 0; i < N; ++i)
+	{
+		for (int j = 0; j < M; ++j)
+		{
+			if (!marked(status, i, j) && marked(flipable, i, j))
+			{
+				int r = std::max(round - 1, 0);
+				int h = hp;
+				int newstatus = mark(status, i, j);
+				int newflipable = expand(flipable, i, j);
+				
+				// if is a monster
+				if (map[i][j] == 'S' || map[i][j] == 'M')
+				{
+					for (int mh = monh[i][j]; mh > 0; mh -= mya)
+					{
+						if (r > 0)
+							--r;
+						else
+							h -= mona[i][j];
+					}
+					if (h <= 0) continue;
+					if (rest - 1 == 0)
+						res = std::max(res, h);
+					else
+						dfs(newstatus, newflipable, h, map[i][j] == 'S' ? 5 : r, rest - 1);
+				}
+				// not a monster
+				else
+				{
+					dfs(newstatus, newflipable, h, r, rest);
+				}
+			}
+		}
+	}
 }
 
 int main()
 {
-    cin >> N >> M;
-    int moncnt = 0;
-    for (int i = 0; i < N; ++i)
-    {
-        string str;
-        cin >> str;
-        for (int j = 0; j < M; ++j)
-        {
-            if (str[j] == 'S' || str[j] == 'M')
-            {
-                monsters[i][j].h = 1;
-                monsters[i][j].s = str[j] == 'S';
-                ++moncnt;
-            }
-            else if (str[j] == 'D')
-            {
-                dx = i;
-                dy = j;
-            }
-        }
-    }
-    for (int i = 0; i < N; ++i)
-        for (int j = 0; j < M; ++j)
-            if (monsters[i][j].h != -1)
-                cin >> monsters[i][j].h >> monsters[i][j].a;
-    int myh;
-    cin >> myh >> mya;
-    
-    int status = 0;
-    mark(status, dx, dy);
-    dfs(status, myh, 5, moncnt);
-    
-    if (res == -1)
-        cout << "DEAD" << endl;
-    else
-        cout << res << endl;
+	cin >> N >> M;
+	for (int i = 0; i < N; ++i)
+	{
+		string str;
+		cin >> str;
+		for (int j = 0; j < M; ++j)
+		{
+			map[i][j] = str[j];
+			if (str[j] == 'M' || str[j] == 'S')
+				++total;
+			else if (str[j] == 'D')
+			{
+				dx = i;
+				dy = j;
+			}
+		}
+	}
+	for (int i = 0; i < N; ++i)
+		for (int j = 0; j < M; ++j)
+			if (map[i][j] == 'M' || map[i][j] == 'S')
+				cin >> monh[i][j] >> mona[i][j];
+	cin >> myh >> mya;
+	
+	int status = mark(0, dx, dy);
+	int flipable = expand(0, dx, dy);
+	dfs(status, flipable, myh, 5, total);
+	if (res == -1)
+		cout << "DEAD" << endl;
+	else
+		cout << res << endl;
 
 	return 0;
 }
