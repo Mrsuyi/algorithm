@@ -1,15 +1,16 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 typedef long long ll;
 
 const int MAXN = 100001;
-int a[MAXN];
-int b[MAXN];
+ll a[MAXN];
+ll b[MAXN];
 
 int main()
 {
-	int N, avg = 0;
+	ll N, avg = 0;
 	cin >> N;
 	for (int i = 0; i < N; ++i)
 	{
@@ -22,7 +23,7 @@ int main()
 	{
 		p += avg - a[i];
 		q += avg - b[i];
-		if ((p ^ q) & (1 << 63))
+		if ((p ^ q) & (1ULL << 63))
 		{
 			res += min(abs(p), abs(q));
 			if (abs(p) > abs(q))
@@ -39,6 +40,6 @@ int main()
 		res += abs(p) + abs(q);
 	}
 	cout << res << endl;
-	
+
 	return 0;
 };
