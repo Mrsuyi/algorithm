@@ -1,0 +1,5 @@
+# get last 1-bit
+n & -n
+
+# eliminate last 1-bit
+n & (n - 1)
