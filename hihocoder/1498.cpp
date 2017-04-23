@@ -3,38 +3,32 @@ using namespace std;
 
 typedef long long ll;
 
-ll time(ll N, ll Q, ll cnt)
+bool can(ll N, ll Q, ll time)
 {
-	ll t = 0;
-	ll robots = 0;
-	for (; robots < cnt; robots *= 2)
-		t += Q;
-	ll done = (robots - cnt) * Q;
-	t += ((N - done) / cnt) + ((N - done) % cnt == 0) ? 0 : 1;
-	return t;
+	for (ll i = 1, robots = 1; robots <= N; ++i, robots *= 2)
+	{
+		ll t = (i - 1) * Q;
+		t += N / robots + (N % robots ? 1 : 0);
+		if (t <= time)
+			return true;
+	}
+	return false;
 }
 
 int main()
 {
 	ll N, Q;
 	cin >> N >> Q;
-	ll l = 1, r = 1000000000000;
-	while (true)
+	ll l = 1, r = N;
+	while (l < r)
 	{
 		ll mid = l + (r - l) / 2;
-		ll tl = time(N, Q, mid - 1);
-		ll t = time(N, Q, mid);
-		ll tr = time(N, Q, mid + 1);
-		if (t >= tl && t >= tr)
-		{
-			cout << t << endl;
-			return 0;
-		}
-		else if (tl <= t && t <= tr)
-			l = mid;
-		else if (tl >= t && t >= tr)
+		if (!can(N, Q, mid))
+			l = mid + 1;
+		else
 			r = mid;
 	}
+	cout << r << endl;
 	
 	return 0;
 }

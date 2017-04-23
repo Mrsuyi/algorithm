@@ -1,8 +1,3 @@
-
-//
-// Still WA, fuck.........
-//
-
 #include <iostream>
 using namespace std;
 
@@ -19,11 +14,11 @@ int dirs[4][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
 int mark(int status, int x, int y)
 {
-	return status | (1 << (x * N + y));
+	return status | (1 << (x * M + y));
 }
 bool marked(int status, int x, int y)
 {
-	return status & (1 << (x * N + y));
+	return status & (1 << (x * M + y));
 }
 int expand(int status, int x, int y)
 {
