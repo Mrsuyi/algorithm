@@ -1,6 +1,6 @@
-#include <cstdio>
 #include <climits>
 #include <cstring>
+#include <cmath>
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -9,9 +9,11 @@
 #include <set>
 #include <queue>
 #include <stack>
-#include <unordered_map>
-#include <unordered_set>
 using namespace std;
+typedef unsigned char byte;
+typedef long long llong;
+typedef unsigned long long ullong;
+inline bool feq(const double& a, const double& b) { return fabs(a - b) < 1e-10; }
 
 int main()
 {
