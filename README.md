@@ -1,7 +1,4 @@
-# ╮(╯▽╰)╭
+# 
 
-+ leetcode
-+ lintcode
-+ lootcode
-+ luutcode
-+ lalalalalalalalala.............
+# matrix
++ http://poj.org/problem?id=3233
