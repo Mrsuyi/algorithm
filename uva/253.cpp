@@ -55,7 +55,7 @@ string rotatez(const string& s)
     a[3] = a[5];
     a[5] = a[2];
     a[2] = tmp;
-    return a;   
+    return a;
 }
 
 int main()
@@ -76,7 +76,7 @@ int main()
                 FO (k, 4)
                 {
                     tmp2 = rotatez(tmp2);
-                    if (tmp == b)
+                    if (tmp2 == b)
                     {
                         printf("TRUE\n");
                         goto end;

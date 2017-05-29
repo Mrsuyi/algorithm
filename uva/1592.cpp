@@ -41,3 +41,46 @@ typedef pair<int, int> pii;
 typedef pair<double, double> pdd;
 typedef pair<llong, llong> pll;
 inline bool feq(const double& a, const double& b) { return fabs(a - b) < 1e-10; }
+
+int N, M;
+string db[10010][12];
+
+int main()
+{
+    while (cin >> N >> M)
+    {
+        getchar();
+        FO (i, N)
+        {
+            string s;
+            getline(cin, s);
+            s.push_back(',');
+            for (int l = 0, r = 0, j = 0; r < s.size(); ++r)
+            {
+                if (s[r] == ',')
+                {
+                    db[i][j] = s.substr(l, r - l);
+                    l = r + 1;
+                    ++j;
+                }
+            }
+        }
+        FO (i, M)
+        FOR (j, i + 1, M)
+        {
+            unordered_map<string, unordered_map<string, int>> mp;
+            FO (k, N)
+            {
+                if (mp[db[k][i]].count(db[k][j]))
+                {
+                    printf("NO\n%d %d\n%d %d\n", mp[db[k][i]][db[k][j]] + 1, k + 1, i + 1, j + 1);
+                    goto end;
+                }
+                mp[db[k][i]][db[k][j]] = k;
+            }
+        }
+        printf("YES\n");
+        end:;
+    }
+    return 0;
+}
