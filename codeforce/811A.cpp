@@ -25,18 +25,18 @@ typedef pair<string, string> pss;
 typedef pair<llong, llong> pll;
 inline bool feq(const double& a, const double& b) { return fabs(a - b) < 1e-10; }
 
-int a, b;
+int cnt[128] = {0};
 
 int main()
 {
-    while (cin >> a >> b)
-    {
-        int ka = sqrt(a);
-        int kb = sqrt(b + 0.25) - 0.5;
-        if (ka > kb)
-            printf("Valera\n");
-        else
-            printf("Vladik\n");
-    }
+    string s;
+    cin >> s;
+    FO (i, s.size())
+        if (++cnt[s[i]] > 1)
+        {
+            cout << "no" << endl;
+            return 0;
+        }
+    cout << "yes" << endl;
     return 0;
 }
