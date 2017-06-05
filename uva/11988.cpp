@@ -43,3 +43,37 @@ typedef pair<int, int> pii;
 typedef pair<double, double> pdd;
 typedef pair<llong, llong> pll;
 inline bool feq(const double& a, const double& b) { return fabs(a - b) < 1e-10; }
+
+int main()
+{
+    string s;
+    while (cin >> s)
+    {
+        deque<string> que;
+        que.push_back(string());
+        string* pt = &que.back();
+        FO (i, s.size())
+        {
+            if (s[i] == '[')
+            {
+                if (i < s.size() - 1 && s[i + 1] != '[' && s[i + 1] != ']')
+                {
+                    que.push_front(string());
+                    pt = &que.front();
+                }
+            }
+            else if (s[i] == ']')
+            {
+                pt = &que.back();
+            }
+            else
+            {
+                pt->push_back(s[i]);
+            }
+        }
+        for (auto it = que.begin(); it != que.end(); ++it)
+            cout << *it;
+        cout << endl;
+    }
+    return 0;
+}

@@ -43,3 +43,28 @@ typedef pair<int, int> pii;
 typedef pair<double, double> pdd;
 typedef pair<llong, llong> pll;
 inline bool feq(const double& a, const double& b) { return fabs(a - b) < 1e-10; }
+
+int T;
+
+int main()
+{
+    cin >> T;
+    FO (t, T)
+    {
+        int D, I;
+        cin >> D >> I;
+        int res = 1 << (D - 1);
+        int base = 1 << (D - 2);
+        do
+        {
+            if (!(I & 1))
+                res += base;
+            I = I / 2 + I % 2;
+            base /= 2;
+        }
+        while (I != 1);
+        cout << res << endl;
+    }
+    cin >> T;
+    return 0;
+}

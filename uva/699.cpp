@@ -43,3 +43,36 @@ typedef pair<int, int> pii;
 typedef pair<double, double> pdd;
 typedef pair<llong, llong> pll;
 inline bool feq(const double& a, const double& b) { return fabs(a - b) < 1e-10; }
+
+int l, r, mid, cnt[10000];
+
+bool get(int off)
+{
+    int num;
+    cin >> num;
+    if (num == -1)
+        return false;
+    l = min(l, off);
+    r = max(r, off);
+    cnt[off] += num;
+    get(off - 1);
+    get(off + 1);
+    return true;
+}
+
+int main()
+{
+    for (int t = 0; ; ++t)
+    {
+        l = r = mid = 5000;
+        memset(cnt, 0, sizeof(cnt));
+        if (!get(5000))
+            return 0;
+        printf("Case %d:\n", t + 1);
+        cout << cnt[l];
+        FOR (i, l + 1, r + 1)
+            cout << " " << cnt[i];
+        cout << endl << endl;
+    }
+    return 0;
+}

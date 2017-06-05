@@ -43,3 +43,50 @@ typedef pair<int, int> pii;
 typedef pair<double, double> pdd;
 typedef pair<llong, llong> pll;
 inline bool feq(const double& a, const double& b) { return fabs(a - b) < 1e-10; }
+
+int T, N;
+int nums[1010];
+
+int main()
+{
+    for (int t = 0;; ++t)
+    {
+        cin >> N;
+        if (N == 0)
+            break;
+        getchar();
+        string s;
+        while (getline(cin, s))
+        {
+            if (s == "0")
+                break;
+            stringstream ss(s);
+            FO (i, N)
+                ss >> nums[i];
+            vector<int> stk;
+            int in = 1;
+            bool ok = true;
+            FO (i, N)
+            {
+                if (!stk.empty() && stk.back() == nums[i])
+                {
+                    stk.pop_back();
+                }
+                else if (nums[i] < in)
+                {
+                    ok = false;
+                    break;
+                }
+                else
+                {
+                    FOR (j, in, nums[i])
+                        stk.push_back(j);
+                    in = nums[i] + 1;
+                }
+            }
+            cout << (ok ? "Yes" : "No") << endl;
+        }
+        cout << endl;
+    }
+    return 0;
+}
