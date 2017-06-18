@@ -25,18 +25,32 @@ typedef pair<string, string> pss;
 typedef pair<llong, llong> pll;
 inline bool feq(const double& a, const double& b) { return fabs(a - b) < 1e-10; }
 
-int cnt[128] = {0};
-
 int main()
 {
+    int N;
     string s;
-    cin >> s;
+    cin >> N >> s;
+    int cl = 0, cr = 0;
+    int dl = 0, dr = 0;
+    size_t pivot = -1;
     FO (i, s.size())
-        if (++cnt[s[i]] > 1)
+    {
+        if (s[i] == '(')
+            ++cl;
+        else
+            ++cr;
+        if (cr - cl > dl)
         {
-            cout << "no" << endl;
-            return 0;
+            dl = cr - cl;
+            pivot = i;
         }
-    cout << "yes" << endl;
+    }
+    string sub = s.substr(pivot + 1);
+    FO (i, sub.size())
+    {
+        if (s[i] == '(');
+    }
+    string res = string(dl, '(') + s + string(dr, ')');
+    cout << res << endl;
     return 0;
 }
