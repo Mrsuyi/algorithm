@@ -44,93 +44,124 @@ typedef pair<double, double> pdd;
 typedef pair<llong, llong> pll;
 inline bool feq(const double& a, const double& b) { return fabs(a - b) < 1e-10; }
 
-const int MAXN = 100100;
-int N, M;
-int d[MAXN];
-bool vis[MAXN];
-int que[MAXN * 8];
-vector<pii> edge[MAXN];
-vector<int> res;
+unordered_map<int, string> no2name;
+unordered_map<string, int> name2no;
+unordered_set<int> has;
+vector<vector<int>> dep;
+vector<int> cnt;
+vector<bool> expli;
+int tot = 0;
 
-void bfs1()
+int reg(const string& name)
 {
-    memset(d, 0, sizeof(int) * (N + 10));
-    que[0] = N;
-    for (int l = 0, r = 1; l < r; ++l)
+    if (name2no.count(name))
+        return name2no[name];
+    int no = tot++;
+    no2name[no] = name;
+    name2no[name] = no;
+    dep.resize(no + 1);
+    cnt.resize(no + 1, 0);
+    expli.resize(no + 1, false);
+    return no;
+}
+
+void ins2(int no)
+{
+    ++cnt[no];
+    if (has.count(no))
+        return;
+    FO (i, dep[no].size())
+        ins2(dep[no][i]);
+    printf("   Installing %s\n", no2name[no].data());
+    has.insert(no);
+}
+void ins(int no)
+{
+    if (has.count(no))
+        printf("   %s is already installed.\n", no2name[no].data());
+    else
     {
-        int u = que[l];
-        FO (i, edge[u].size())
-        {
-            int v = edge[u][i].fi;
-            if (d[v] != 0 || v == N)
-                continue;
-            d[v] = d[u] + 1;
-            que[r++] = v;
-        }
+        FO (i, dep[no].size())
+            ins2(dep[no][i]);
+        printf("   Installing %s\n", no2name[no].data());
+        expli[no] = true;
+        has.insert(no);
     }
 }
 
-void bfs2()
+void unins2(int no)
 {
-    memset(vis, 0, sizeof(bool) * (N + 10));
-    res.clear();
-    vector<int> cur(1, 1);
-    for (; d[cur[0]] != 0;)
+    if (!has.count(no) || cnt[no] > 0 || expli[no])
+        return;
+    printf("   Removing %s\n", no2name[no].data());
+    has.erase(no);
+    FO (i, dep[no].size())
     {
-        int minw = INT_MAX;
-        FO (i, cur.size())
-        {
-            int u = cur[i];
-            FO (j, edge[u].size())
-            {
-                int v = edge[u][j].fi;
-                int w = edge[u][j].se;
-                if (d[v] != d[u] - 1)
-                    continue;
-                minw = min(minw, w);
-            }
-        }
-        res.push_back(minw);
-        vector<int> nxt;
-        FO (i, cur.size())
-        {
-            int u = cur[i];
-            FO (j, edge[u].size())
-            {
-                int v = edge[u][j].fi;
-                int w = edge[u][j].se;
-                if (d[v] != d[u] - 1 || vis[v] || w != minw)
-                    continue;
-                nxt.push_back(v);
-                vis[v] = true;
-            }
-        }
-        swap(nxt, cur);
+        --cnt[dep[no][i]];
+        unins2(dep[no][i]);
+    }
+}
+void unins(int no)
+{
+    if (!has.count(no))
+        printf("   %s is not installed.\n", no2name[no].data());
+    else if (cnt[no] > 0)
+        printf("   %s is still needed.\n", no2name[no].data());
+    else
+    {
+        expli[no] = false;
+        unins2(no);
     }
 }
 
 int main()
 {
-    while (cin >> N >> M)
+    string s;
+    while (getline(cin, s))
     {
-        FO (i, N + 1)
-            edge[i].clear();
-        FO (i, M)
+        cout << s << endl;
+        if (s == "END")
         {
-            int a, b, c;
-            cin >> a >> b >> c;
-            if (a == b)
-                continue;
-            edge[a].push_back(pii(b, c));
-            edge[b].push_back(pii(a, c));
+            no2name.clear();
+            name2no.clear();
+            has.clear();
+            dep.clear();
+            cnt.clear();
+            expli.clear();
+            tot = 0;
+            continue;
         }
-        bfs1();
-        cout << d[1] << endl;
-        bfs2();
-        cout << res[0];
-        FOR (i, 1, res.size())
-            cout << " " << res[i];
-        cout << endl;
+        stringstream ss(s);
+        string cmd;
+        ss >> cmd;
+        if (cmd == "DEPEND")
+        {
+            string hi;
+            ss >> hi;
+            int nohi = reg(hi);
+            for (string lo; ss >> lo;)
+            {
+                int nolo = reg(lo);
+                dep[nohi].push_back(nolo);
+            }
+        }
+        else if (cmd == "INSTALL")
+        {
+            string name;
+            ss >> name;
+            ins(reg(name));
+        }
+        else if (cmd == "REMOVE")
+        {
+            string name;
+            ss >> name;
+            unins(reg(name));
+        }
+        else if (cmd == "LIST")
+        {
+            for (auto& no : has)
+                cout << "   " << no2name[no] << endl;
+        }
     }
     return 0;
 }
