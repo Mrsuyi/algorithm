@@ -7,6 +7,6 @@
 # problems
 
 ## BFS/DFS
-+ uva-11853 https://vjudge.net/problem/UVA-11853
-+ uva-1599  https://vjudge.net/problem/UVA-1599
-
++ uva-11853 <https://vjudge.net/problem/UVA-11853>
++ uva-1599 <https://vjudge.net/problem/UVA-1599>
++ uva-10410 <https://vjudge.net/problem/UVA-10410>
