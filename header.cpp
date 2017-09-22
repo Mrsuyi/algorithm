@@ -32,14 +32,9 @@ using namespace std;
 #define fi first
 #define se second
 #define FO(x, n) for (int x = 0; x < n; ++x)
-#define FOR(x, a, b) for (int x = a; x < b; ++x)
-#define RFO(x, n) for (int x = n - 1; x >= 0; --x)
-#define RFOR(x, a, b) for (int x = b - 1; x >= a; --x)
-typedef unsigned char byte;
-typedef unsigned int uint;
 typedef long long llong;
-typedef unsigned long long ullong;
 typedef pair<int, int> pii;
 typedef pair<double, double> pdd;
 typedef pair<llong, llong> pll;
-inline bool feq(const double& a, const double& b) { return fabs(a - b) < 1e-10; }
+const int MOD = 1e9 - 7, EPS = 1e-10;
+inline bool feq(const double& a, const double& b) { return fabs(a - b) < EPS; }
