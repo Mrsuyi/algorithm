@@ -1,8 +1,9 @@
 # tips
 
 ## bit
-+ get last bit  n & -n
-+ del last bit  n & (n - 1)
++ 取最后一位 n & -n
++ 删除最后一位 n & (n - 1)
++ 遍历不连续位k的子集 for (int i = k; i; i = (i - 1) & k)
 
 # problems
 
