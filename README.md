@@ -1,4 +1,4 @@
-# tips
+# templates
 
 ## bit
 + 取最后一位 n & -n
@@ -11,7 +11,7 @@
 + uva-140 剪枝 <https://vjudge.net/problem/UVA-140>
 + uva-1354 子集遍历 <https://vjudge.net/problem/UVA-1354>
 
-## BFS/DFS
+## BFS/DFS/IDA*
 + uva-11853 建图 <https://vjudge.net/problem/UVA-11853>
 + uva-1599 反向BFS <https://vjudge.net/problem/UVA-1599>
 + uva-10410 栈 <https://vjudge.net/problem/UVA-10410>
