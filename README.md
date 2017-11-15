@@ -19,7 +19,8 @@
 + uva-10410 栈 <https://vjudge.net/problem/UVA-10410>
 + uva-1601 双向BFS+建图剪枝 <https://vjudge.net/problem/UVA-1601>
 + uva-11212 IDA* <https://vjudge.net/problem/UVA-11212>
-+ uva-818 统计链数量 <https://vjudge.net/problem/UVA-818> 
++ uva-818 统计链数量 <https://vjudge.net/problem/UVA-818>
++ uva-12107 双DFS <https://vjudge.net/problem/UVA-12107> 
 
 ### Euler
 + uva-12118 连通块 <https://vjudge.net/problem/UVA-12118>
