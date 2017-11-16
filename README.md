@@ -21,6 +21,7 @@
 + uva-11212 IDA* <https://vjudge.net/problem/UVA-11212>
 + uva-818 统计链数量 <https://vjudge.net/problem/UVA-818>
 + uva-12107 双DFS <https://vjudge.net/problem/UVA-12107>
++ uva-12569 状压BFS <https://vjudge.net/problem/UVA-12569>
 
 ### Euler
 + uva-12118 连通块 <https://vjudge.net/problem/UVA-12118>
