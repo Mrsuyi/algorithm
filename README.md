@@ -7,6 +7,9 @@
 
 # problems
 
+## 分治
++ uva-12627 找规律 <https://vjudge.net/problem/UVA-12627>
+
 ## 回溯
 + uva-140 剪枝 <https://vjudge.net/problem/UVA-140>
 + uva-1354 子集遍历 <https://vjudge.net/problem/UVA-1354>
@@ -27,3 +30,7 @@
 
 ## 计算几何
 + uva-1606 极角排序+扫描 <https://vjudge.net/problem/UVA-1606>
++ uva-1451 斜率优化 <https://vjudge.net/problem/UVA-1451>
+
+## DP
++ uva-1471 LIS <https://vjudge.net/problem/UVA-1471>
