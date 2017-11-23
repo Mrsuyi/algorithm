@@ -9,6 +9,7 @@
 
 ## 分治
 + uva-12627 找规律 <https://vjudge.net/problem/UVA-12627>
++ uva-1608 两端扫描 <https://vjudge.net/problem/UVA-1608>
 
 ## 回溯
 + uva-140 剪枝 <https://vjudge.net/problem/UVA-140>
