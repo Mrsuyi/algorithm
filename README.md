@@ -7,6 +7,9 @@
 
 # problems
 
+## 博弈
++ uva-1609 递归+构造 <https://vjudge.net/problem/UVA-1609>
+
 ## 分治
 + uva-12627 找规律 <https://vjudge.net/problem/UVA-12627>
 + uva-1608 两端扫描 <https://vjudge.net/problem/UVA-1608>
