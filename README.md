@@ -14,6 +14,9 @@
 + uva-140 剪枝 <https://vjudge.net/problem/UVA-140>
 + uva-1354 子集遍历 <https://vjudge.net/problem/UVA-1354>
 
+## 二分
++ uva-1607 模拟 <https://vjudge.net/problem/UVA-1607>
+
 ## 图论
 ### BFS/DFS/IDA*
 + uva-11853 建图 <https://vjudge.net/problem/UVA-11853>
