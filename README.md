@@ -7,6 +7,9 @@
 
 # problems
 
+## 贪心
++ uva-1442 扫描 <https://vjudge.net/problem/UVA-1442>
+
 ## 博弈
 + uva-1609 递归+构造 <https://vjudge.net/problem/UVA-1609>
 
