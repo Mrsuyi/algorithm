@@ -30,9 +30,10 @@ using namespace tr1;
 # endif
 using namespace std;
 #define FO(x, n) for (int x = 0; x < n; ++x)
+#define RFO(x, n) for (int x = n - 1; x >= 0; --x)
 typedef long long llong;
 typedef pair<int, int> pii;
 typedef pair<double, double> pdd;
 typedef pair<llong, llong> pll;
-const int INF = 0x0fffffff, MOD = 1e9 + 7, EPS = 1e-8;
+const int INF = 0x7fffff7f, MOD = 1e9 + 7, EPS = 1e-8;
 inline bool feq(const double& a, const double& b) { return fabs(a - b) < EPS; }

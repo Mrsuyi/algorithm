@@ -17,6 +17,9 @@
 + uva-12627 找规律 <https://vjudge.net/problem/UVA-12627>
 + uva-1608 两端扫描 <https://vjudge.net/problem/UVA-1608>
 
+## 单调栈
++ uva-12265 <https://vjudge.net/problem/UVA-12265>
+
 ## 回溯
 + uva-140 剪枝 <https://vjudge.net/problem/UVA-140>
 + uva-1354 子集遍历 <https://vjudge.net/problem/UVA-1354>
