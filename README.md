@@ -10,6 +10,7 @@
 ## 贪心
 + uva-1442 扫描 <https://vjudge.net/problem/UVA-1442>
 + uva-1614 归纳证明 <https://vjudge.net/problem/UVA-1614>
++ uva-1153 区间排序+优先队列 <https://vjudge.net/problem/UVA-1153>
 
 ## 博弈
 + uva-1609 递归+构造 <https://vjudge.net/problem/UVA-1609>
