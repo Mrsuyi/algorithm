@@ -13,6 +13,9 @@
 + uva-1153 区间排序+优先队列 <https://vjudge.net/problem/UVA-1153>
 + uva-1617 区间排序 <https://vjudge.net/problem/UVA-1617>
 
+## 暴力
++ uva-1312 排序枚举 <https://vjudge.net/problem/UVA-1312>
+
 ## 博弈
 + uva-1609 递归+构造 <https://vjudge.net/problem/UVA-1609>
 
