@@ -22,6 +22,7 @@
 
 ## 单调栈
 + uva-12265 <https://vjudge.net/problem/UVA-12265>
++ uva-1619 分治/排序/单调栈 <https://vjudge.net/problem/UVA-1619>
 
 ## 回溯
 + uva-140 剪枝 <https://vjudge.net/problem/UVA-140>
