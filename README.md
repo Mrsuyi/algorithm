@@ -12,6 +12,7 @@
 + uva-1614 归纳证明 <https://vjudge.net/problem/UVA-1614>
 + uva-1153 区间排序+优先队列 <https://vjudge.net/problem/UVA-1153>
 + uva-1617 区间排序 <https://vjudge.net/problem/UVA-1617>
++ uva-1623 二分查找/下标数组 <https://vjudge.net/problem/UVA-1623>
 
 ## 暴力
 + uva-1312 排序枚举 <https://vjudge.net/problem/UVA-1312>
