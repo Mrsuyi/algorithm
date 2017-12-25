@@ -1,9 +1,9 @@
 # templates
 
 ## bit
-+ 取最后一位 n & -n
-+ 删除最后一位 n & (n - 1)
-+ 遍历不连续位k的子集 for (int i = k; i; i = (i - 1) & k)
++ 取最后的1 n & -n
++ 删除最后的1 n & (n - 1)
++ 子集遍历 for (int i = k; i; i = (i - 1) & k)
 
 # problems
 
@@ -63,3 +63,4 @@
 + uva-10003 四边形不等式 <https://vjudge.net/problem/UVA-10003>
 + uva-1218 树形DP <https://vjudge.net/problem/UVA-1218>
 + uva-10817 状态压缩 <https://vjudge.net/problem/UVA-10817>
++ uva-1252 子集遍历 <https://vjudge.net/problem/UVA-1252>
