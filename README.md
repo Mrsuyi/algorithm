@@ -64,3 +64,4 @@
 + uva-1218 树形DP <https://vjudge.net/problem/UVA-1218>
 + uva-10817 状态压缩 <https://vjudge.net/problem/UVA-10817>
 + uva-1252 子集遍历 <https://vjudge.net/problem/UVA-1252>
++ uva-1412 状态压缩/编码 <https://vjudge.net/problem/UVA-1412>
