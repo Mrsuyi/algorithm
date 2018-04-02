@@ -66,3 +66,5 @@
 + uva-1252 子集遍历 <https://vjudge.net/problem/UVA-1252>
 + uva-1412 状态压缩/编码 <https://vjudge.net/problem/UVA-1412>
 + uva-10618 复杂转移条件 <https://vjudge.net/problem/UVA-10618>
++ uva-10934 状态定义 <https://vjudge.net/problem/UVA-10934>
++ uva-1336 未来费用统计 <https://vjudge.net/problem/UVA-1336>
