@@ -69,3 +69,4 @@
 + uva-10934 状态定义 <https://vjudge.net/problem/UVA-10934>
 + uva-1336 未来费用统计 <https://vjudge.net/problem/UVA-1336>
 + uva-12105 状态定义 <https://vjudge.net/problem/UVA-12105>
++ uva-1204 字符串操作 <https://vjudge.net/problem/UVA-1204>
