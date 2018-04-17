@@ -70,3 +70,5 @@
 + uva-1336 未来费用统计 <https://vjudge.net/problem/UVA-1336>
 + uva-12105 状态定义 <https://vjudge.net/problem/UVA-12105>
 + uva-1204 字符串操作 <https://vjudge.net/problem/UVA-1204>
++ uva-10118 状态压缩 <https://vjudge.net/problem/UVA-10118>
++ uva-1633 状态转移 <https://vjudge.net/problem/UVA-1633>

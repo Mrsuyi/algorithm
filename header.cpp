@@ -35,5 +35,6 @@ typedef long long llong;
 typedef pair<int, int> pii;
 typedef pair<double, double> pdd;
 typedef pair<llong, llong> pll;
-const int INF = 0x7fffff7f, MOD = 1e9 + 7, EPS = 1e-8;
+const int INF = 0x7fffff7f, MOD = 1e9 + 7;
+const double PI = 3.141592653589793238463, EPS = 1e-8;
 inline bool feq(const double& a, const double& b) { return fabs(a - b) < EPS; }
