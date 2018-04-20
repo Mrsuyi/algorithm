@@ -72,3 +72,4 @@
 + uva-1204 字符串操作 <https://vjudge.net/problem/UVA-1204>
 + uva-10118 状态压缩 <https://vjudge.net/problem/UVA-10118>
 + uva-1633 状态转移 <https://vjudge.net/problem/UVA-1633>
++ uva-10271 倒序 <https://vjudge.net/problem/UVA-10271>
