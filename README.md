@@ -73,3 +73,4 @@
 + uva-10118 状态压缩 <https://vjudge.net/problem/UVA-10118>
 + uva-1633 状态转移 <https://vjudge.net/problem/UVA-1633>
 + uva-10271 倒序 <https://vjudge.net/problem/UVA-10271>
++ uva-12099 状态定义 <https://vjudge.net/problem/UVA-12099>
