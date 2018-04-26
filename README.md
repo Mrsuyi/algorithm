@@ -74,3 +74,4 @@
 + uva-1633 状态转移 <https://vjudge.net/problem/UVA-1633>
 + uva-10271 倒序 <https://vjudge.net/problem/UVA-10271>
 + uva-12099 状态定义 <https://vjudge.net/problem/UVA-12099>
++ uva-1443 二分+奇偶 <https://vjudge.net/problem/UVA-1443>
