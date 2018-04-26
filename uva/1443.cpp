@@ -42,16 +42,17 @@ const int MOD = 1e9 + 7;
 const double PI = 3.141592653589793238463, EPS = 1e-8;
 inline bool feq(const double& a, const double& b) { return fabs(a - b) < EPS; }
 
-const int MAXN = 40040, MAXM = 10010, MAXD = 10010;
+const int MAXN = 40040, MAXM = 10010, MAXD = 10010, INF = 0x3f3f3f3f;
 int N, M, D;
 int dp[MAXN][2], weis[MAXN], sums[MAXN] = {0};
 
 bool ok(int K)
 {
-    memset(dp, 0x3f, sizeof(dp));
     dp[0][0] = 0;
+    dp[0][1] = INF;
     for (int i = 1; i <= N / 2; ++i)
     {
+        dp[i][0] = dp[i][1] = INF;
         for (int j = i - 1; j >= 0 && i - j <= D; --j)
         {
             int l = 2 * j, m = i + j, r = 2 * i;
