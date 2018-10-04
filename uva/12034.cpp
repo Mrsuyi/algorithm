@@ -43,39 +43,27 @@ inline bool feq(const double& a, const double& b) {
   return fabs(a - b) < EPS;
 }
 
-// a better solution
-// let f[i] be the number of safe arrangements of i cubes, then:
-//
-//      f[i] = f[i - 1] + f[i - 2] + f[i - 3]
-//
-// consider the last cubes, there are 3 valid combinations:
-//    L + f[i - 1]
-//    UL + f[i - 2]
-//    UUL + f[i - 3]
-
-int dp[50][4][2];
+const int MAXN = 1010, mod = 10056;
+int N, dp[MAXN][MAXN] = {0};
+int res[MAXN] = {0};
 
 int main() {
-  int n;
-  while (cin >> n && n) {
-    memset(dp, 0, sizeof(dp));
-    dp[0][0][0] = 1;
-    dp[0][1][0] = 1;
-    for (int i = 1; i < n; ++i) {
-      // append L
-      dp[i][0][0] = dp[i - 1][0][0] + dp[i - 1][1][0] + dp[i - 1][2][0];
-      dp[i][0][1] =
-          dp[i - 1][0][1] + dp[i - 1][1][1] + dp[i - 1][2][1] + dp[i - 1][3][1];
-      // append U
-      dp[i][1][0] = dp[i - 1][0][0];
-      dp[i][1][1] = dp[i - 1][0][1];
-      dp[i][2][0] = dp[i - 1][1][0];
-      dp[i][2][1] = dp[i - 1][1][1];
-
-      dp[i][3][1] = dp[i - 1][2][0] + dp[i - 1][2][1] + dp[i - 1][3][1];
+  dp[0][0] = 1;
+  for (int i = 1; i <= 1000; ++i) {
+    for (int j = 1; j <= i; ++j) {
+      dp[i][j] = (j * (dp[i - 1][j - 1] + dp[i - 1][j])) % mod;
     }
-    printf("%d\n", dp[n - 1][0][1] + dp[n - 1][1][1] + dp[n - 1][2][1] +
-                       dp[n - 1][3][1]);
+  }
+  for (int i = 1; i <= 1000; ++i) {
+    for (int j = 1; j <= i; ++j) {
+      res[i] = (res[i] + dp[i][j]) % mod;
+    }
+  }
+  int T;
+  cin >> T;
+  for (int i = 0; i < T; ++i) {
+    cin >> N;
+    printf("Case %d: %d\n", i + 1, res[N]);
   }
   return 0;
 }
