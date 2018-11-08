@@ -42,6 +42,13 @@ inline bool feq(const double& a, const double& b) {
   return fabs(a - b) < EPS;
 }
 
+// clang-format off
+#define CAT_(x, y) x##y
+#define CAT(x, y) CAT_(x, y)
+#define BGN namespace CAT(splitter_, __LINE__) {
+#define END };
+// clang-format on
+
 // a > b
 // gcd of a/b
 int gcd(int a, int b) {
@@ -60,10 +67,11 @@ void exgcd(int a, int b, int& d, int& x, int& y) {
 }
 
 // Eratosthenes filtering
-// get all primes in [0, n].
+// Get all prime numbers in [2, N].
+// O(NloglogN)
+BGN;
 bool not_prime[10000] = {0};
-vector<int> primes;
-void get_primes(int n) {
+void eratosthenes_filtering(int n) {
   int m = sqrt(n + 0.5);
   for (int i = 2; i <= m; ++i) {
     if (not_prime[i])
@@ -71,16 +79,38 @@ void get_primes(int n) {
     for (int j = i * i; j <= n; j += i)
       not_prime[j] = true;
   }
-  for (int i = 2; i <= n; ++i)
-    if (!not_prime[i])
-      primes.push_back(i);
 }
+END;
+
+// Euler filtering
+// Get all prime numbers in [2, N].
+// O(N)
+BGN;
+bool not_prime[10000] = {0};
+int primes[10000];
+int euler_filtering(int n) {
+  int tot = 0;
+  for (int i = 2; i <= n; ++i) {
+    if (!not_prime[i])
+      primes[tot++] = i;
+    for (int j = 0; j < tot; ++j) {
+      not_prime[i * primes[j]] = true;
+      if (i % primes[j])
+        break;
+    }
+  }
+  return tot;
+}
+END;
 
 // Unique prime-factorization theorem
 // factorize a natural number into a mutiplication of prime numbers.
+BGN;
+int primes[10000];
+int tot;
 vector<pii> factorize(int n) {
   vector<pii> res;
-  for (size_t i = 0; i < primes.size() && primes[i] <= n && n > 1; ++i) {
+  for (int i = 0; i < tot && primes[i] <= n && n > 1; ++i) {
     if (n % primes[i] == 0) {
       res.push_back({primes[i], 0});
       while (n % primes[i] == 0) {
@@ -93,9 +123,11 @@ vector<pii> factorize(int n) {
     res.push_back({n, 1});
   return res;
 }
+END;
 
 // Euler Phi function
 // number of m in [1, N] that is coprime to N.
+BGN;
 int phi[10000] = {0};
 void euler_phi() {
   phi[1] = 1;
@@ -109,6 +141,7 @@ void euler_phi() {
     }
   }
 }
+END;
 
 int main() {
   return 0;
