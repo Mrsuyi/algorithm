@@ -129,12 +129,12 @@ END;
 // number of m in [1, N] that is coprime to N.
 BGN;
 int phi[10000] = {0};
-void euler_phi() {
+void euler_phi(int n) {
   phi[1] = 1;
-  for (int i = 2; i < 10000; ++i) {
+  for (int i = 2; i <= n; ++i) {
     if (phi[i])
       continue;
-    for (int j = i; j < 10000; j += i) {
+    for (int j = i; j <= n; j += i) {
       if (!phi[j])
         phi[j] = j;
       phi[j] = phi[j] * (i - 1) / i;
