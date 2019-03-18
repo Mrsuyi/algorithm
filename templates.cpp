@@ -132,16 +132,45 @@ int phi[10000] = {0};
 void euler_phi(int n) {
   phi[1] = 1;
   for (int i = 2; i <= n; ++i) {
-    if (phi[i])
+    if (phi[i]) {
       continue;
+    }
     for (int j = i; j <= n; j += i) {
-      if (!phi[j])
+      if (!phi[j]) {
         phi[j] = j;
+      }
       phi[j] = phi[j] * (i - 1) / i;
     }
   }
 }
 END;
+
+// KMP
+bool kmp(const string& str, const string& target) {
+  // target[i] => length of longest common prefix&suffix in target[0, i].
+  vector<int> len(target.size(), 0);
+  for (int i = 1; i < target.size(); ++i) {
+    len[i] = len[i - 1];
+    while (len[i] > 0 && target[i] != target[len[i]]) {
+      len[i] = len[len[i] - 1];
+    }
+    if (target[i] == target[len[i]]) {
+      ++len[i];
+    }
+  }
+  for (int i = 0, j = 0; i < str.size(); ++i) {
+    while (j > 0 && str[i] != target[j]) {
+      j = len[j - 1];
+    }
+    if (str[i] == target[j]) {
+      ++j;
+      if (j == target.size()) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
 
 int main() {
   return 0;
