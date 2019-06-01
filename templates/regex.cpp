@@ -1,8 +1,11 @@
 #include <iostream>
 #include <memory>
+#include <unordered_set>
 #include <vector>
 
 using namespace std;
+
+#pragma mark - Node
 
 struct Node {
   enum Type {
@@ -13,55 +16,152 @@ struct Node {
     END,
   };
 
-  Node(Type type, char c = '\0')
-      : type(type), left(nullptr), right(nullptr), chr(c) {}
+  Node(Type type, char c = '\0', int idx = -1)
+      : type(type), left(nullptr), right(nullptr), chr(c), idx(idx) {}
 
-  bool nullable() const { return type == STAR; }
+  // Calculate firstpos, lastpos, followpos.
+  void calc();
+  bool nullable() const;
 
-  // Only for test purpose.
-  string print() const {
-    switch (type) {
-      case CAT:
-        assert(left);
-        assert(right);
-        return left->print() + right->print();
-      case OR:
-        assert(left);
-        assert(right);
-        return left->print() + '|' + right->print();
-      case STAR: {
-        assert(left);
-        assert(!right);
-        string sub = left->print();
-        if (sub.size() > 1) {
-          return "(" + sub + ")*";
-        } else {
-          return sub + "*";
-        };
-      }
-      case CHAR:
-        return string(1, chr);
-      case END:
-        return "";
-    }
-    assert(false);
-    return "";
-  }
+  // Only for test purpose:
+  // Recover regex pattern.
+  string print_pattern() const;
+  // Print NFA.
+  void print_nfa() const;
 
   Type type;
   Node* left;
   Node* right;
   char chr;
-  vector<Node*> firstpos;
-  vector<Node*> lastpos;
-  vector<Node*> followpos;
+  int idx;
+  unordered_set<Node*> firstpos;
+  unordered_set<Node*> lastpos;
+  unordered_set<Node*> followpos;
 };
+
+std::string Node::print_pattern() const {
+  switch (type) {
+    case CAT:
+      assert(left);
+      assert(right);
+      return left->print_pattern() + right->print_pattern();
+    case OR:
+      assert(left);
+      assert(right);
+      return left->print_pattern() + '|' + right->print_pattern();
+    case STAR: {
+      assert(left);
+      assert(!right);
+      string sub = left->print_pattern();
+      if (sub.size() > 1) {
+        return "(" + sub + ")*";
+      } else {
+        return sub + "*";
+      };
+    }
+    case CHAR:
+      return string(1, chr);
+    case END:
+      return "";
+  }
+  assert(false);
+  return "";
+}
+
+bool Node::nullable() const {
+  switch (type) {
+    case STAR:
+      return true;
+    case OR:
+      return left->nullable() || right->nullable();
+    case CAT:
+      return left->nullable() && right->nullable();
+    case CHAR:
+    case END:
+      return true;
+  }
+  assert(false);
+  return true;
+}
+
+void Node::calc() {
+  if (left)
+    left->calc();
+  if (right)
+    right->calc();
+
+  switch (type) {
+    case CHAR:
+    case END: {
+      firstpos.insert(this);
+      lastpos.insert(this);
+      break;
+    }
+    case STAR: {
+      firstpos = left->firstpos;
+      lastpos = right->lastpos;
+      // followpos.
+      for (Node* last : lastpos) {
+        for (Node* first : firstpos) {
+          first->followpos.insert(last);
+        }
+      }
+      break;
+    }
+    case CAT: {
+      // firstpos.
+      for (Node* first : left->firstpos) {
+        firstpos.insert(first);
+      }
+      if (left->nullable()) {
+        for (Node* first : right->firstpos) {
+          firstpos.insert(first);
+        }
+      }
+      // lastpos.
+      for (Node* last : right->lastpos) {
+        lastpos.insert(last);
+      }
+      if (right->nullable()) {
+        for (Node* last : left->lastpos) {
+          lastpos.insert(last);
+        }
+      }
+      // followpos.
+      for (Node* r : right->firstpos) {
+        for (Node* l : left->lastpos) {
+          l->followpos.insert(r);
+        }
+      }
+      break;
+    }
+    case OR: {
+      // firstpos.
+      for (Node* first : left->firstpos) {
+        firstpos.insert(first);
+      }
+      for (Node* first : right->firstpos) {
+        firstpos.insert(first);
+      }
+      // lastpos.
+      for (Node* first : left->firstpos) {
+        firstpos.insert(first);
+      }
+      for (Node* first : right->firstpos) {
+        firstpos.insert(first);
+      }
+      break;
+    }
+  }
+}
+
+#pragma mark - Tree
 
 struct Tree {
   Tree(const string& pattern);
   ~Tree();
 
-  // Match as much as possible until ')' or end.
+  // Eat as much as possible until ')' or end.
   Node* eat();
   // Try to eat a '*'.
   Node* eat_star(Node* cur);
@@ -118,7 +218,7 @@ Node* Tree::eat() {
       }
       // normal char.
       else {
-        cur = new Node(Node::CHAR, pattern[idx]);
+        cur = new Node(Node::CHAR, pattern[idx], idx);
         ++idx;
       }
       cur = eat_star(cur);
@@ -160,13 +260,15 @@ Node* Tree::eat_star(Node* cur) {
   return star;
 }
 
+#pragma mark - Regex
+
 struct Regex {
   Regex(const string& pattern);
 };
 
 int main() {
-  assert(Tree("a|b").root->print() == "a|b");
-  assert(Tree("(a|b)*abb").root->print() == "(a|b)*abb");
+  assert(Tree("a|b").root->print_pattern() == "a|b");
+  assert(Tree("(a|b)*abb").root->print_pattern() == "(a|b)*abb");
 
   return 0;
 }
