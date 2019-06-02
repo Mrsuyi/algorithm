@@ -7,6 +7,10 @@ using namespace std;
 
 #pragma mark - Node
 
+const char* node_type_2_str[] = {
+    "CAT", "OR", "STAR", "CHAR", "END",
+};
+
 struct Node {
   enum Type {
     CAT = 0,
@@ -26,6 +30,8 @@ struct Node {
   // Only for test purpose:
   // Recover regex pattern.
   string print_pattern() const;
+  // Print tree.
+  void print_tree(int depth = 0) const;
   // Print NFA.
   void print_nfa() const;
 
@@ -39,35 +45,6 @@ struct Node {
   unordered_set<Node*> followpos;
 };
 
-std::string Node::print_pattern() const {
-  switch (type) {
-    case CAT:
-      assert(left);
-      assert(right);
-      return left->print_pattern() + right->print_pattern();
-    case OR:
-      assert(left);
-      assert(right);
-      return left->print_pattern() + '|' + right->print_pattern();
-    case STAR: {
-      assert(left);
-      assert(!right);
-      string sub = left->print_pattern();
-      if (sub.size() > 1) {
-        return "(" + sub + ")*";
-      } else {
-        return sub + "*";
-      };
-    }
-    case CHAR:
-      return string(1, chr);
-    case END:
-      return "";
-  }
-  assert(false);
-  return "";
-}
-
 bool Node::nullable() const {
   switch (type) {
     case STAR:
@@ -78,7 +55,7 @@ bool Node::nullable() const {
       return left->nullable() && right->nullable();
     case CHAR:
     case END:
-      return true;
+      return false;
   }
   assert(false);
   return true;
@@ -99,11 +76,11 @@ void Node::calc() {
     }
     case STAR: {
       firstpos = left->firstpos;
-      lastpos = right->lastpos;
+      lastpos = left->lastpos;
       // followpos.
       for (Node* last : lastpos) {
         for (Node* first : firstpos) {
-          first->followpos.insert(last);
+          last->followpos.insert(first);
         }
       }
       break;
@@ -144,14 +121,81 @@ void Node::calc() {
         firstpos.insert(first);
       }
       // lastpos.
-      for (Node* first : left->firstpos) {
-        firstpos.insert(first);
+      for (Node* last : left->lastpos) {
+        lastpos.insert(last);
       }
-      for (Node* first : right->firstpos) {
-        firstpos.insert(first);
+      for (Node* last : right->lastpos) {
+        lastpos.insert(last);
       }
       break;
     }
+  }
+}
+
+std::string Node::print_pattern() const {
+  switch (type) {
+    case CAT:
+      assert(left);
+      assert(right);
+      return left->print_pattern() + right->print_pattern();
+    case OR:
+      assert(left);
+      assert(right);
+      return left->print_pattern() + '|' + right->print_pattern();
+    case STAR: {
+      assert(left);
+      assert(!right);
+      string sub = left->print_pattern();
+      if (sub.size() > 1) {
+        return "(" + sub + ")*";
+      } else {
+        return sub + "*";
+      };
+    }
+    case CHAR:
+      return string(1, chr);
+    case END:
+      return "";
+  }
+  assert(false);
+  return "";
+}
+
+void Node::print_tree(int depth) const {
+  printf("%s", string(depth, '\t').c_str());
+  printf("%llu %s %d '%c'\n", (unsigned long long)this, node_type_2_str[type],
+         idx, chr);
+  if (left)
+    left->print_tree(depth + 1);
+  if (right)
+    right->print_tree(depth + 1);
+}
+
+void Node::print_nfa() const {
+  if (left) {
+    left->print_nfa();
+  }
+  switch (type) {
+    case CHAR:
+    case END:
+      printf("Node %d '%c':\n\tfirstpos:\t", idx, chr);
+      for (Node* first : firstpos)
+        printf("%d ", first->idx);
+      printf("\n\tlastpos:\t");
+      for (Node* last : lastpos)
+        printf("%d ", last->idx);
+      printf("\n\tfollowpos:\t");
+      for (Node* follow : followpos)
+        printf("%d ", follow->idx);
+      printf("\n");
+      break;
+    case CAT:
+    case OR:
+    case STAR:
+      break;
+  }
+  if (right) {
+    right->print_nfa();
   }
 }
 
@@ -174,6 +218,17 @@ struct Tree {
 
 Tree::Tree(const string& pattern) : root(nullptr), pattern(pattern), idx(0) {
   root = eat();
+
+  // Add trailing END node.
+  Node* end = new Node(Node::END, '#');
+  nodes.push_back(end);
+  Node* cat = new Node(Node::CAT);
+  nodes.push_back(cat);
+  cat->left = root;
+  cat->right = end;
+  root = cat;
+
+  root->calc();
 }
 
 Tree::~Tree() {
@@ -234,16 +289,7 @@ Node* Tree::eat() {
       }
     }
   }
-  // null pattern.
-  if (!pre)
-    return nullptr;
-  Node* end = new Node(Node::END);
-  nodes.push_back(end);
-  Node* cat = new Node(Node::CAT);
-  nodes.push_back(cat);
-  cat->left = pre;
-  cat->right = end;
-  return cat;
+  return pre;
 }
 
 Node* Tree::eat_star(Node* cur) {
@@ -267,8 +313,17 @@ struct Regex {
 };
 
 int main() {
-  assert(Tree("a|b").root->print_pattern() == "a|b");
-  assert(Tree("(a|b)*abb").root->print_pattern() == "(a|b)*abb");
+  // printf("a|b\n");
+  Tree t1("a|b");
+  assert(t1.root->print_pattern() == "a|b");
+  // t1.root->print_tree();
+  // t1.root->print_nfa();
+
+  printf("(a|b)*abb\n");
+  Tree t2("(a|b)*abb");
+  assert(t2.root->print_pattern() == "(a|b)*abb");
+  // t2.root->print_tree();
+  t2.root->print_nfa();
 
   return 0;
 }
