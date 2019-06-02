@@ -1,5 +1,7 @@
 #include <iostream>
 #include <memory>
+#include <queue>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
@@ -217,6 +219,7 @@ struct Tree {
 };
 
 Tree::Tree(const string& pattern) : root(nullptr), pattern(pattern), idx(0) {
+  // Parse |pattern| into Nodes.
   root = eat();
 
   // Add trailing END node.
@@ -309,8 +312,53 @@ Node* Tree::eat_star(Node* cur) {
 #pragma mark - Regex
 
 struct Regex {
-  Regex(const string& pattern);
+  Regex(const string& pattern) : tree(pattern) { compile(); }
+
+  // Generate DFA.
+  void compile();
+
+  Tree tree;
 };
+
+void Regex::compile() {
+  unordered_set<char> charset;
+  for (char c : tree.pattern)
+    charset.insert(c);
+
+  using State = unordered_set<Node*>;
+  vector<unique_ptr<State>> states;
+  vector<unordered_map<char, int>> trans;
+
+  states.push_back(make_unique<State>(tree.root->firstpos.begin(),
+                                      tree.root->firstpos.end()));
+  const State& init_state = *states[0];
+
+  queue<int> bfs;
+  bfs.push(0);
+  while (!bfs.empty()) {
+    const State& cur = *states[bfs.front()];
+    bfs.pop();
+
+    for (char c : charset) {
+      unique_ptr<State> nxt = make_unique<State>();
+      // Transfer to another node.
+      for (const Node* node : cur) {
+        if (node->chr == c) {
+          for (Node* follow : node->followpos) {
+            nxt->insert(follow);
+          }
+        }
+        // Fallback to init state.
+        else {
+          for (Node* node : init_state) {
+            nxt->insert(node);
+          }
+        }
+      }
+      // Check if state exists.
+    }
+  }
+}
 
 int main() {
   // printf("a|b\n");
