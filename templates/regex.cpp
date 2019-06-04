@@ -214,21 +214,23 @@ struct Tree {
 
   Node* root;
   vector<Node*> nodes;
+  Node* end_node;
   const string pattern;
   size_t idx;
 };
 
-Tree::Tree(const string& pattern) : root(nullptr), pattern(pattern), idx(0) {
+Tree::Tree(const string& pattern)
+    : root(nullptr), end_node(nullptr), pattern(pattern), idx(0) {
   // Parse |pattern| into Nodes.
   root = eat();
 
   // Add trailing END node.
-  Node* end = new Node(Node::END, '#');
-  nodes.push_back(end);
+  end_node = new Node(Node::END, '#');
+  nodes.push_back(end_node);
   Node* cat = new Node(Node::CAT);
   nodes.push_back(cat);
   cat->left = root;
-  cat->right = end;
+  cat->right = end_node;
   root = cat;
 
   root->calc();
@@ -326,52 +328,68 @@ void Regex::compile() {
     charset.insert(c);
 
   using State = unordered_set<Node*>;
-  vector<unique_ptr<State>> states;
+  vector<State> states;
+  vector<bool> is_end_state;
   vector<unordered_map<char, int>> trans;
 
-  states.push_back(make_unique<State>(tree.root->firstpos.begin(),
-                                      tree.root->firstpos.end()));
-  const State& init_state = *states[0];
+  states.emplace_back(tree.root->firstpos.begin(), tree.root->firstpos.end());
+  const State& init_state = states[0];
+  is_end_state.push_back(init_state.count(tree.end_node));
 
   queue<int> bfs;
   bfs.push(0);
   while (!bfs.empty()) {
-    const State& cur = *states[bfs.front()];
+    int icur = bfs.front();
+    const State& cur = states[icur];
     bfs.pop();
 
+    // For char in |charset|.
     for (char c : charset) {
-      unique_ptr<State> nxt = make_unique<State>();
+      State nxt;
       // Transfer to another node.
       for (const Node* node : cur) {
         if (node->chr == c) {
           for (Node* follow : node->followpos) {
-            nxt->insert(follow);
+            nxt.insert(follow);
           }
         }
         // Fallback to init state.
         else {
           for (Node* node : init_state) {
-            nxt->insert(node);
+            nxt.insert(node);
           }
         }
       }
       // Check if state exists.
+      auto it = find(states.begin(), states.end(), nxt);
+      if (it == states.end()) {
+        it = states.insert(it, std::move(nxt));
+        is_end_state.push_back(nxt.count(tree.end_node));
+      }
+      int inxt = it - states.begin();
+      trans[icur][c] = inxt;
     }
+
+    // For other chars, transfer to init state.
+    trans[icur][0] = 0;
   }
+
+  assert(states.size() == is_end_state.size());
+  printf("states.size(): %lu\n", states.size());
 }
 
 int main() {
-  // printf("a|b\n");
-  Tree t1("a|b");
-  assert(t1.root->print_pattern() == "a|b");
+  printf("a|b\n");
+  Regex r1("a|b");
+  assert(r1.tree.root->print_pattern() == "a|b");
   // t1.root->print_tree();
   // t1.root->print_nfa();
 
-  printf("(a|b)*abb\n");
-  Tree t2("(a|b)*abb");
-  assert(t2.root->print_pattern() == "(a|b)*abb");
+  // printf("(a|b)*abb\n");
+  Regex r2("(a|b)*abb");
+  assert(r2.tree.root->print_pattern() == "(a|b)*abb");
   // t2.root->print_tree();
-  t2.root->print_nfa();
+  r2.tree.root->print_nfa();
 
   return 0;
 }
