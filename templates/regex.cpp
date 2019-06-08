@@ -279,6 +279,7 @@ Node* Tree::eat() {
       // normal char.
       else {
         cur = new Node(Node::CHAR, pattern[idx], idx);
+        nodes.push_back(cur);
         ++idx;
       }
       cur = eat_star(cur);
@@ -318,36 +319,44 @@ struct Regex {
 
   // Generate DFA.
   void compile();
+  vector<pair<size_t, size_t>> match(const string& str) const;
+
+  // Only for test.
+  void print_trans() const;
+
+  unordered_set<char> charset;
+  vector<bool> is_end_state;
+  vector<unordered_map<char, int>> trans;
 
   Tree tree;
 };
 
 void Regex::compile() {
-  unordered_set<char> charset;
-  for (char c : tree.pattern)
-    charset.insert(c);
+  for (Node* node : tree.nodes) {
+    if (node->type == Node::CHAR) {
+      charset.insert(node->chr);
+    }
+  }
 
   using State = unordered_set<Node*>;
   vector<State> states;
-  vector<bool> is_end_state;
-  vector<unordered_map<char, int>> trans;
 
   states.emplace_back(tree.root->firstpos.begin(), tree.root->firstpos.end());
-  const State& init_state = states[0];
-  is_end_state.push_back(init_state.count(tree.end_node));
+  is_end_state.push_back(states[0].count(tree.end_node));
+  trans.emplace_back();
 
   queue<int> bfs;
   bfs.push(0);
   while (!bfs.empty()) {
     int icur = bfs.front();
-    const State& cur = states[icur];
     bfs.pop();
 
     // For char in |charset|.
     for (char c : charset) {
       State nxt;
+
       // Transfer to another node.
-      for (const Node* node : cur) {
+      for (const Node* node : states[icur]) {
         if (node->chr == c) {
           for (Node* follow : node->followpos) {
             nxt.insert(follow);
@@ -355,41 +364,91 @@ void Regex::compile() {
         }
         // Fallback to init state.
         else {
-          for (Node* node : init_state) {
+          for (Node* node : states[0]) {
             nxt.insert(node);
           }
         }
       }
+
       // Check if state exists.
       auto it = find(states.begin(), states.end(), nxt);
       if (it == states.end()) {
-        it = states.insert(it, std::move(nxt));
+        // If |nxt| contains end node, it's an end state.
         is_end_state.push_back(nxt.count(tree.end_node));
+        it = states.insert(it, std::move(nxt));
+        trans.emplace_back();
+        bfs.push(states.size() - 1);
       }
       int inxt = it - states.begin();
       trans[icur][c] = inxt;
     }
-
-    // For other chars, transfer to init state.
-    trans[icur][0] = 0;
   }
-
   assert(states.size() == is_end_state.size());
-  printf("states.size(): %lu\n", states.size());
+  // printf("states.size(): %lu\n", states.size());
+}
+
+vector<pair<size_t, size_t>> Regex::match(const string& str) const {
+  vector<pair<size_t, size_t>> res;
+  size_t bgn = 0;
+  int state = 0;
+  for (size_t i = 0; i < str.size(); ++i) {
+    if (charset.count(str[i])) {
+      state = trans[state].at(str[i]);
+      if (is_end_state[state]) {
+        assert(bgn != -1);
+        res.push_back({bgn, i});
+        bgn = i + 1;
+        state = 0;
+      }
+    } else {
+      state = 0;
+      bgn = i + 1;
+    }
+    assert(state < is_end_state.size() && state >= 0);
+  }
+  return res;
+}
+
+void Regex::print_trans() const {
+  for (size_t i = 0; i < trans.size(); ++i) {
+    printf("state: %lu  is_end_state: %d\n", i, (bool)is_end_state[i]);
+    for (const auto& chr_2_state : trans[i]) {
+      printf("  '%c' => %d\n", chr_2_state.first, chr_2_state.second);
+    }
+  }
 }
 
 int main() {
-  printf("a|b\n");
+  // printf("a|b\n");
   Regex r1("a|b");
   assert(r1.tree.root->print_pattern() == "a|b");
-  // t1.root->print_tree();
-  // t1.root->print_nfa();
+  // r1.tree.root->print_tree();
+  // r1.tree.root->print_nfa();
 
   // printf("(a|b)*abb\n");
   Regex r2("(a|b)*abb");
   assert(r2.tree.root->print_pattern() == "(a|b)*abb");
   // t2.root->print_tree();
-  r2.tree.root->print_nfa();
+  // r2.tree.root->print_nfa();
+  // r2.print_trans();
+
+  auto res = r2.match("xxabbxababbxxxxaaaabaabaabb");
+  assert(res.size() == 3);
+  assert(res[0].first == 2);
+  assert(res[0].second == 4);
+  assert(res[1].first == 6);
+  assert(res[1].second == 10);
+  assert(res[2].first == 15);
+  assert(res[2].second == 26);
+
+  Regex r3("(a|b)*c(d|e)*f*g");
+  // r3.print_trans();
+  res = r3.match("aababcdddefgxxxcg");
+  assert(res.size() == 2);
+  assert(res[0].first == 0);
+  assert(res[0].second == 11);
+  assert(res[1].first == 15);
+  assert(res[1].second == 16);
 
   return 0;
 }
