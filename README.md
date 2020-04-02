@@ -1,77 +1,17 @@
 # templates
 
 ## bit
-+ 取最后的1 n & -n
-+ 删除最后的1 n & (n - 1)
-+ 子集遍历 for (int i = k; i; i = (i - 1) & k)
++ Get last "1" of n
+```
+n = k & -k;
+```
 
-# problems
++ Remove last "1" from n
+```
+n = k & (k - 1);
+```
 
-## Greedy
-+ uva-1442 扫描 <https://vjudge.net/problem/UVA-1442>
-+ uva-1614 归纳证明 <https://vjudge.net/problem/UVA-1614>
-+ uva-1153 区间排序+优先队列 <https://vjudge.net/problem/UVA-1153>
-+ uva-1617 区间排序 <https://vjudge.net/problem/UVA-1617>
-+ uva-1623 map/union-find <https://vjudge.net/problem/UVA-1623>
-
-## brute-force
-+ uva-1312 排序枚举 <https://vjudge.net/problem/UVA-1312>
-
-## game
-+ uva-1609 递归+构造 <https://vjudge.net/problem/UVA-1609>
-
-## divide-conquer
-+ uva-12627 找规律 <https://vjudge.net/problem/UVA-12627>
-+ uva-1608 两端扫描 <https://vjudge.net/problem/UVA-1608>
-
-## singular-stack
-+ uva-12265 <https://vjudge.net/problem/UVA-12265>
-+ uva-1619 分治/排序/单调栈 <https://vjudge.net/problem/UVA-1619>
-
-## back-track
-+ uva-140 剪枝 <https://vjudge.net/problem/UVA-140>
-+ uva-1354 子集遍历 <https://vjudge.net/problem/UVA-1354>
-
-## binary-search
-+ uva-1607 模拟 <https://vjudge.net/problem/UVA-1607>
-
-## graph
-### BFS/DFS/IDA\*
-+ uva-11853 建图 <https://vjudge.net/problem/UVA-11853>
-+ uva-1599 反向BFS <https://vjudge.net/problem/UVA-1599>
-+ uva-10410 栈 <https://vjudge.net/problem/UVA-10410>
-+ uva-1601 双向BFS+建图剪枝 <https://vjudge.net/problem/UVA-1601>
-+ uva-11212 IDA\* <https://vjudge.net/problem/UVA-11212>
-+ uva-818 统计链数量 <https://vjudge.net/problem/UVA-818>
-+ uva-12107 双DFS <https://vjudge.net/problem/UVA-12107>
-+ uva-12569 状态压缩BFS <https://vjudge.net/problem/UVA-12569>
-
-### Euler
-+ uva-12118 连通块 <https://vjudge.net/problem/UVA-12118>
-
-## geometry
-+ uva-1606 极角排序+扫描 <https://vjudge.net/problem/UVA-1606>
-+ uva-1451 斜率优化 <https://vjudge.net/problem/UVA-1451>
-
-## DP
-+ uva-1471 LIS <https://vjudge.net/problem/UVA-1471>
-+ uva-1025 搭火车 <https://vjudge.net/problem/UVA-1025>
-+ uva-437 DAG <https://vjudge.net/problem/UVA-437>
-+ uva-1347 路径 <https://vjudge.net/problem/UVA-1347>
-+ uva-12563 0-1背包 <https://vjudge.net/problem/UVA-12563>
-+ uva-1625 辅助状态 <https://vjudge.net/problem/UVA-1625>
-+ uva-10003 四边形不等式 <https://vjudge.net/problem/UVA-10003>
-+ uva-1218 树形DP <https://vjudge.net/problem/UVA-1218>
-+ uva-10817 状态压缩 <https://vjudge.net/problem/UVA-10817>
-+ uva-1252 子集遍历 <https://vjudge.net/problem/UVA-1252>
-+ uva-1412 状态压缩/编码 <https://vjudge.net/problem/UVA-1412>
-+ uva-10618 复杂转移条件 <https://vjudge.net/problem/UVA-10618>
-+ uva-10934 状态定义 <https://vjudge.net/problem/UVA-10934>
-+ uva-1336 未来费用统计 <https://vjudge.net/problem/UVA-1336>
-+ uva-12105 状态定义 <https://vjudge.net/problem/UVA-12105>
-+ uva-1204 字符串操作 <https://vjudge.net/problem/UVA-1204>
-+ uva-10118 状态压缩 <https://vjudge.net/problem/UVA-10118>
-+ uva-1633 状态转移 <https://vjudge.net/problem/UVA-1633>
-+ uva-10271 倒序 <https://vjudge.net/problem/UVA-10271>
-+ uva-12099 状态定义 <https://vjudge.net/problem/UVA-12099>
-+ uva-1443 二分+奇偶 <https://vjudge.net/problem/UVA-1443>
++ Traverse subsets of k (e.g. k=5 -> {101, 100, 001})
+```
+for (int i = k; i; i = (i - 1) & k) {}
+```

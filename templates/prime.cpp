@@ -10,7 +10,7 @@ namespace eratosthenes {
 // Get all prime numbers in [2, N].
 // O(NloglogN)
 bool not_prime[10000] = {0};
-void eratosthenes_filtering(int n) {
+int eratosthenes_filtering(int n) {
   int m = sqrt(n + 0.5);
   for (int i = 2; i <= m; ++i) {
     if (not_prime[i])
@@ -18,6 +18,11 @@ void eratosthenes_filtering(int n) {
     for (int j = i * i; j <= n; j += i)
       not_prime[j] = true;
   }
+  int res = 0;
+  for (int i = 2; i <= n; ++i) {
+    res += !not_prime[i];
+  }
+  return res;
 }
 }  // namespace eratosthenes
 
@@ -35,7 +40,7 @@ int euler_filtering(int n) {
     for (int j = 0; j < tot; ++j) {
       not_prime[i * primes[j]] = true;
       if (i % primes[j])
-        break;
+        continue;
     }
   }
   return tot;
@@ -81,5 +86,18 @@ void euler_phi(int n) {
 }
 
 int main() {
+  vector<int> primes = {2,  3,  5,  7,  11, 13, 17, 19, 23, 29, 31, 37, 41,
+                        43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
+
+  assert(primes.size() == eratosthenes::eratosthenes_filtering(100));
+  for (int prime : primes) {
+    assert(!eratosthenes::not_prime[prime]);
+  }
+
+  assert(primes.size() == euler::euler_filtering(100));
+  for (int prime : primes) {
+    assert(!euler::not_prime[prime]);
+  }
+
   return 0;
 }
