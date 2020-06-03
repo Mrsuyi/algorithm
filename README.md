@@ -16,6 +16,26 @@ n = k & (k - 1);
 for (int i = k; i; i = (i - 1) & k) {}
 ```
 
++ Binary indexed tree (Fenwick tree)
+```cpp
+const int N = 1 << 20;
+int arr[N] = {0};
+
+void add(int i, int val) {
+  while (i < N) {
+    arr[i] += val;
+    i += i & -i;
+  }
+}
+int sum(int i) {
+  int res = 0;
+  while (i) {
+    res += arr[i];
+    i = i & (i - 1);
+  }
+  return res;
+}
+```
 
 ## Math
 
