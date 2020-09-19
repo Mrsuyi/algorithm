@@ -12,14 +12,14 @@ n = k & (k - 1);
 ```
 
 + Traverse subsets of k (e.g. k=5 -> {101, 100, 001})
-```cpp
-for (int i = k; i; i = (i - 1) & k) {}
-```
+  ```cpp
+  for (int i = k; i; i = (i - 1) & k) {}
+  ```
 
 + Binary indexed tree (Fenwick tree)
-```cpp
-const int N = 1 << 20;
-int arr[N] = {0};
+  ```cpp
+  const int N = 1 << 20;
+  int arr[N] = {0};
 
 void add(int i, int val) {
   while (i < N) {
@@ -40,11 +40,11 @@ int sum(int i) {
 ## Math
 
 + GCD (Greatest Common Divisor)
-```cpp
-// a >= b > 0
-int gcd(int a, int b) {
-  return b ? gcd(b, a % b) : a;
-}
+  ```cpp
+  // a >= b > 0
+  int gcd(int a, int b) {
+    return b ? gcd(b, a % b) : a;
+  }
 
 // Extended GCD: a*x+b*y=gcd(a, b)
 void exgcd(int a, int b, int& d, int& x, int& y) {
@@ -61,30 +61,35 @@ void exgcd(int a, int b, int& d, int& x, int& y) {
 ```cpp
 // Eratosthenes filtering
 // O(NloglogN)
-bool not_prime[10000] = {0};
-void eratosthenes_filtering(int n) {
-  int m = sqrt(n + 0.5);
-  for (int i = 2; i <= m; ++i) {
+bool not_prime[100000] = {0};
+int primes[100000];
+int eratosthenes_filtering(int n) {
+  int tot = 0;
+  for (int i = 2; i <= n; ++i) {
     if (not_prime[i])
       continue;
+    primes[tot++] = i;
     for (int j = i * i; j <= n; j += i)
       not_prime[j] = true;
   }
+  return tot;
 }
 
 // Euler filtering
 // O(N)
-bool not_prime[10000] = {0};
-int primes[10000];
+bool not_prime[100000] = {0};
+int primes[100000];
 int euler_filtering(int n) {
   int tot = 0;
   for (int i = 2; i <= n; ++i) {
     if (!not_prime[i])
       primes[tot++] = i;
     for (int j = 0; j < tot; ++j) {
+      if (i * primes[j] > n)
+        break;
       not_prime[i * primes[j]] = true;
-      if (i % primes[j])
-        continue;
+      if (i % primes[j] == 0)
+        break;
     }
   }
   return tot;
