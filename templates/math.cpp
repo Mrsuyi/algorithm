@@ -2,6 +2,18 @@
 #include <vector>
 using namespace std;
 
+namespace std {
+template <> struct hash<vector<int>> {
+  size_t operator()(const vector<int> &vec) const {
+    size_t seed = 0;
+    for (size_t v : vec) {
+      seed ^= v + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+    }
+    return seed;
+  }
+};
+} // namespace std
+
 namespace brute_force {
 
 vector<int> brute_force(int n) {
