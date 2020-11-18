@@ -1,6 +1,8 @@
-\#Templates
+# Templates
 
-\#Bit + Get last "1" of n
+# Bit
+
+*   Get last "1" of n
 
 ```cpp
 n = k & -k;
@@ -50,4 +52,41 @@ struct FenwickTree {
 
   vector<int> val;
 };
+```
+
+*   Custom std::hash function
+
+```cpp
+// Custom hash function for vector.
+namespace std {
+template <>
+struct hash<vector<int>> {
+  size_t operator()(const vector<int>& vec) const {
+    size_t seed = 0;
+    for (size_t v : vec) {
+      seed ^= v + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+    }
+    return seed;
+  }
+};
+}  // namespace std
+```
+
+*   Euler filtering get prime numbers
+
+```cpp
+vector<int> euler_filtering(int n) {
+  vector<bool> not_prime(n + 1, false);
+  vector<int> primes;
+  primes.reserve(n / 10 + 500);
+  for (int i = 2; i <= n; ++i) {
+    if (!not_prime[i]) primes.push_back(i);
+    for (size_t j = 0; j < primes.size(); ++j) {
+      if (i * primes[j] > n) break;
+      not_prime[i * primes[j]] = true;
+      if (i % primes[j] == 0) break;
+    }
+  }
+  return primes;
+}
 ```
