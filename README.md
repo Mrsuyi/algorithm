@@ -20,6 +20,20 @@ n = k & (k - 1);
 for (int i = k; i; i = (i - 1) & k) {}
 ```
 
+*   Extended Euclidean algorithm.
+
+```cpp
+// ax + by = d
+void exgcd(int a, int b, int& d, int& x, int& y) {
+  if (b) {
+    exgcd(b, a % b, d, y, x);
+    y -= x * (a / b);
+  } else {
+    d = a, x = 1, y = 0;
+  }
+}
+```
+
 *   Binary indexed tree(Fenwick tree)
 
 ```cpp

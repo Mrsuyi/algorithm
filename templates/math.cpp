@@ -20,6 +20,7 @@ struct hash<vector<int>> {
 int gcd(int a, int b) { return (b == 0) ? a : gcd(b, a % b); }
 
 // Extended Euclidean algorithm.
+// ax + by = d
 void exgcd(int a, int b, int& d, int& x, int& y) {
   if (b) {
     exgcd(b, a % b, d, y, x);
