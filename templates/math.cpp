@@ -19,14 +19,14 @@ struct hash<vector<int>> {
 // Euclidean algorithm. a >= b.
 int gcd(int a, int b) { return (b == 0) ? a : gcd(b, a % b); }
 
-// Extended Euclidean algorithm.
-// ax + by = d
-void exgcd(int a, int b, int& d, int& x, int& y) {
+// Extended Euclidean algorithm. a >= b
+// ax + by = k*gcd(a, b)
+void exgcd(int a, int b, int& d, int& x, int& y, int k = 1) {
   if (b) {
     exgcd(b, a % b, d, y, x);
     y -= x * (a / b);
   } else {
-    d = a, x = 1, y = 0;
+    d = a, x = k, y = 0;
   }
 }
 

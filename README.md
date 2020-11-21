@@ -1,42 +1,26 @@
 # Templates
 
-# Bit
-
-*   Get last "1" of n
-
 ```cpp
+// Get last "1" of n
 n = k & -k;
-```
 
-*   Remove last "1" from n
-
-```cpp
+// Remove last "1" from n
 n = k & (k - 1);
-```
 
-*   Traverse subsets of k(e.g.k = 5->{101, 100, 001})
-
-```cpp
+// Traverse subsets of k(e.g.k = 5->{101, 100, 001})
 for (int i = k; i; i = (i - 1) & k) {}
-```
 
-*   Extended Euclidean algorithm.
-
-```cpp
-// ax + by = d
-void exgcd(int a, int b, int& d, int& x, int& y) {
+// Extended Euclidean algorithm. a >= b
+// ax + by = k*gcd(a, b)
+void exgcd(int a, int b, int& d, int& x, int& y, int k = 1) {
   if (b) {
     exgcd(b, a % b, d, y, x);
     y -= x * (a / b);
   } else {
-    d = a, x = 1, y = 0;
+    d = a, x = k, y = 0;
   }
 }
-```
 
-*   Binary indexed tree(Fenwick tree)
-
-```cpp
 // [0, ma)
 struct FenwickTree {
   FenwickTree(int ma) : val(ma, 0) {}
@@ -66,11 +50,7 @@ struct FenwickTree {
 
   vector<int> val;
 };
-```
 
-*   Custom std::hash function
-
-```cpp
 // Custom hash function for vector.
 namespace std {
 template <>
@@ -84,11 +64,8 @@ struct hash<vector<int>> {
   }
 };
 }  // namespace std
-```
 
-*   Euler filtering get prime numbers
-
-```cpp
+// Euler filtering get prime numbers
 vector<int> euler_filtering(int n) {
   vector<bool> not_prime(n + 1, false);
   vector<int> primes;
