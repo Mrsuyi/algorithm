@@ -38,11 +38,9 @@ struct FenwickTree {
   }
 
   int get(int i) {
-    int res = 0;
-    while (true) {
+    int res = val[0];
+    while (i) {
       res += val[i];
-      if (i == 0)
-        break;
       i &= i - 1;
     }
     return res;

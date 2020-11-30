@@ -20,11 +20,9 @@ struct FenwickTree {
   }
 
   int get(int i) {
-    int res = 0;
-    while (true) {
+    int res = val[0];
+    while (i) {
       res += val[i];
-      if (i == 0)
-        break;
       i &= i - 1;
     }
     return res;
@@ -43,8 +41,7 @@ int main() {
       int v = rand() % ma;
 
       f.add(v);
-      for (int k = v; k < ma; ++k)
-        ++sum[k];
+      for (int k = v; k < ma; ++k) ++sum[k];
 
       for (int k = 0; k < ma; ++k) {
         assert(f.get(k) == sum[k]);
