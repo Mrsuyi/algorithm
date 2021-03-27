@@ -10,6 +10,16 @@ n = k & (k - 1);
 // Traverse subsets of k(e.g.k = 5->{101, 100, 001})
 for (int i = k; i; i = (i - 1) & k) {}
 
+// Count #1
+int count1(int v) {
+    v = v - ((v >> 1) & 0x55555555);
+    v = (v & 0x33333333) + ((v >> 2) & 0x33333333);
+    v = (v & 0x0F0F0F0F) + ((v >> 4) & 0x0F0F0F0F);
+    v = (v & 0x00FF00FF) + ((v >> 8) & 0x00FF00FF);
+    v = (v & 0x0000FFFF) + ((v >> 16) & 0x0000FFFF);
+    return v;
+}
+
 // Extended Euclidean algorithm. a >= b
 // ax + by = k*gcd(a, b)
 void exgcd(int a, int b, int& d, int& x, int& y, int k = 1) {
