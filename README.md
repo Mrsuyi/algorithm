@@ -31,6 +31,17 @@ void exgcd(int a, int b, int& d, int& x, int& y, int k = 1) {
   }
 }
 
+// a/b % mod = m  ->  a*x % mod = m
+//   a % mod = m*b % mod
+//   a*x % mod = m*b*x % mod
+//   m = m*b*x % mod
+//   1 = b*x % mod
+int rev(int b, int mod) {
+  int d, x, y;
+  exgcd(b, mod, d, x, y);
+  return (x % mod + mod) % mod;
+}
+
 // [0, ma)
 struct FenwickTree {
   FenwickTree(int ma) : val(ma, 0) {}
