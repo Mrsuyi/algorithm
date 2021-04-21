@@ -30,6 +30,17 @@ void exgcd(int a, int b, int& d, int& x, int& y, int k = 1) {
   }
 }
 
+// a/b % mod = m  ->  a*x % mod = m
+//   a % mod = m*b % mod
+//   a*x % mod = m*b*x % mod
+//   m = m*b*x % mod
+//   1 = b*x % mod
+int rev(int b, int mod) {
+  int d, x, y;
+  exgcd(b, mod, d, x, y);
+  return (x % mod + mod) % mod;
+}
+
 // Calculate prime numbers.
 vector<int> brute_force(int n) {
   vector<int> primes;
@@ -70,6 +81,20 @@ vector<int> eratosthenes_filtering(int n) {
 }
 
 int main() {
+  vector<int> primes = euler_filtering(1000);
+  for (int i = primes.size() - 1; i >= 10; --i) {
+    int mod = primes[i];
+    int b = rand() % 1000 + 10;
+    int mul = rand() % 100 + 1;
+    int a = b * mul;
+    int r = rev(b, mod);
+    int lhs = a / b % mod;
+    int rhs = a * r % mod;
+    printf("mod: %d  a: %d  b: %d  r: %d  lhs: %d  rhs: %d\n", mod, a, b, r,
+           lhs, rhs);
+    assert(lhs == rhs);
+  }
+
   for (int i = 0; i < 10; ++i) {
     int n = rand() % 100000;
     vector<int> a = brute_force(n);
