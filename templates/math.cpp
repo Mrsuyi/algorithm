@@ -41,6 +41,19 @@ int rev(int b, int mod) {
   return (x % mod + mod) % mod;
 }
 
+// mod >= 2
+int rev2(int b, int mod) {
+  int exp = mod - 2;
+  long res = 1;
+  long base = b;
+  while (exp) {
+    if (exp & 1) res = res * base % mod;
+    base = base * base % mod;
+    exp >>= 1;
+  }
+  return res;
+}
+
 // Calculate prime numbers.
 vector<int> brute_force(int n) {
   vector<int> primes;
@@ -88,12 +101,15 @@ int main() {
     int mul = rand() % 100 + 1;
     int a = b * mul;
     int r = rev(b, mod);
+    int r2 = rev2(b, mod);
     int lhs = a / b % mod;
     int rhs = a * r % mod;
-    printf("mod: %d  a: %d  b: %d  r: %d  lhs: %d  rhs: %d\n", mod, a, b, r,
-           lhs, rhs);
+    printf("mod: %d  a: %d  b: %d  r: %d  r2: %d  lhs: %d  rhs: %d\n", mod, a,
+           b, r, r2, lhs, rhs);
+    assert(r2 == r);
     assert(lhs == rhs);
   }
+  return 0;
 
   for (int i = 0; i < 10; ++i) {
     int n = rand() % 100000;
