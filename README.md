@@ -42,6 +42,19 @@ int rev(int b, int mod) {
   return (x % mod + mod) % mod;
 }
 
+// mod >= 2
+int rev2(int b, int mod) {
+  int exp = mod - 2;
+  long res = 1;
+  long base = b;
+  while (exp) {
+    if (exp & 1) res = res * base % mod;
+    base = base * base % mod;
+    exp >>= 1;
+  }
+  return res;
+}
+
 // [0, ma)
 struct FenwickTree {
   FenwickTree(int ma) : val(ma, 0) {}
