@@ -57,30 +57,30 @@ int rev2(int b, int mod) {
 
 // [0, ma)
 struct FenwickTree {
-  FenwickTree(int ma) : val(ma, 0) {}
+  FenwickTree(int ma) : cnt(ma, 0) {}
 
-  void add(int i) {
+  void add(int i, int val = 1) {
     if (i == 0) {
-      ++val[0];
+      cnt[0] += val;
       return;
     }
-    int ma = val.size();
+    int ma = cnt.size();
     while (i < ma) {
-      ++val[i];
+      cnt[i] += val;
       i += i & -i;
     }
   }
 
   int get(int i) {
-    int res = val[0];
+    int res = cnt[0];
     while (i) {
-      res += val[i];
+      res += cnt[i];
       i &= i - 1;
     }
     return res;
   }
 
-  vector<int> val;
+  vector<int> cnt;
 };
 
 // Custom hash function for vector.
