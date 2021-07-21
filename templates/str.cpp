@@ -1,4 +1,5 @@
 #include <cmath>
+#include <deque>
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -24,7 +25,7 @@ class Kmp {
       }
     }
 
-    int match(const string& s) {
+    int match(const string& s) const {
       int j = 0;
       for (int i = 0; i < s.size(); ++i) {
         while (j && s[i] != p[j])
@@ -65,84 +66,96 @@ void test_kmp() {
   }
 }
 
-namespace ac {
+class Ac {
+  public:
+    struct Trie {
+      int children[26] = {0};
+      vector<int> hits;
+    };
 
-  struct Trie {
-    Trie() {
-      memset(children, 0, sizeof(children));
-      pre = 0;
-      word = false;
-    }
-    int children[26];
-    int pre;
-    bool word;
-  };
-
-  vector<Trie> tries;
-  int state;
-
-  void add(const string &s) {
-    int cur = 0;
-    for (size_t i = 0; i < s.size(); ++i) {
-      if (tries[cur].children[s[i] - 'a'] == 0) {
-        tries[cur].children[s[i] - 'a'] = tries.size();
-        tries.push_back(Trie());
+    Ac(const vector<string>& patterns) : ps(patterns), tries(1) {
+      for (int i = 0; i < ps.size(); ++i) {
+        int cur = 0;
+        for (char c : ps[i]) {
+          if (tries[cur].children[c - 'a'] == 0) {
+            tries[cur].children[c - 'a'] = tries.size();
+            tries.push_back(Trie());
+          }
+          cur = tries[cur].children[c - 'a'];
+        }
+        tries[cur].hits = {i};
       }
-      cur = tries[cur].children[s[i] - 'a'];
-      tries[cur].word |= (i == s.size() - 1);
-    }
-  }
-
-  void build() {
-    vector<int> bfs = {0};
-    while (!bfs.empty()) {
-      vector<int> subs;
-      for (int cur : bfs) {
+      f = vector<int>(tries.size(), 0);
+      deque<int> bfs = {0};
+      while (!bfs.empty()) {
+        int cur = bfs.front();
+        bfs.pop_front();
         for (int i = 0; i < 26; ++i) {
           if (tries[cur].children[i] == 0)
             continue;
           int nxt = tries[cur].children[i];
-          int pre = tries[cur].pre;
-          if (cur != 0) {
-            while (true) {
-              if (tries[pre].children[i] != 0) {
-                tries[nxt].pre = tries[pre].children[i];
-                break;
-              }
-              if (pre == 0)
-                break;
-              pre = tries[pre].pre;
-            }
-          }
-          subs.push_back(nxt);
+          bfs.push_back(nxt);
+          if (cur == 0)
+            continue;
+          int j = f[cur];
+          while (j && tries[j].children[i] == 0)
+            j = f[j];
+          f[nxt] = j = tries[j].children[i];
+          auto& hits = tries[nxt].hits;
+          hits.insert(hits.end(), tries[j].hits.begin(), tries[j].hits.end());
         }
       }
-      swap(subs, bfs);
     }
-  }
 
-  bool match(char c) {
-    while (true) {
-      if (tries[state].children[c - 'a'] != 0) {
-        state = tries[state].children[c - 'a'];
-        break;
+    vector<pair<int, int>> match(const string& s) const {
+      vector<pair<int, int>> res;
+      int j = 0;
+      for (int i = 0; i < s.size(); ++i) {
+        while (j && tries[j].children[s[i] - 'a'] == 0)
+          j = f[j];
+        j = tries[j].children[s[i] - 'a'];
+        for (int hit : tries[j].hits)
+          res.push_back({i - ps[hit].size() + 1, hit});
       }
-      if (state == 0)
-        break;
-      state = tries[state].pre;
+      return res;
     }
-    int cur = state;
-    while (cur) {
-      if (tries[cur].word)
-        return true;
-      cur = tries[cur].pre;
-    }
-    return false;
-  }
 
-} // namespace ac
+    vector<string> ps;
+    vector<Trie> tries;
+    vector<int> f;
+};
+
+void test_ac() {
+  for (int i = 0; i < 100; ++i) {
+    vector<string> ps(rand() % 30);
+    for (int j = 0; j < ps.size(); ++j)
+      ps[j] = rand_str(rand() % 10 + 1, 7);
+    sort(ps.begin(), ps.end());
+    ps.resize(unique(ps.begin(), ps.end()) - ps.begin());
+    string s = rand_str(rand() % 1000);
+
+    vector<pair<int, int>> res;
+    for (int j = 0; j < s.size(); ++j) {
+      for (int k = 0; k < ps.size(); ++k) {
+        if (j + ps[k].size() > s.size())
+          continue;
+        if (string_view(&s[0] + j, ps[k].size()) == ps[k])
+          res.push_back({j, k});
+      }
+    }
+
+    Ac ac(ps);
+    vector<pair<int, int>> res2 = ac.match(s);
+
+    sort(res.begin(), res.end());
+    sort(res2.begin(), res2.end());
+
+    assert(res == res2);
+  }
+}
 
 int main() {
-  test_kmp();
+  //test_kmp();
+  //test_ac();
   return 0;
 }
