@@ -69,8 +69,9 @@ void test_kmp() {
 class Ac {
   public:
     struct Trie {
+      int last = 0; // point to longest pattern suffix.
+      int pattern = -1;
       int children[26] = {0};
-      vector<int> hits;
     };
 
     Ac(const vector<string>& patterns) : ps(patterns), tries(1) {
@@ -83,7 +84,7 @@ class Ac {
           }
           cur = tries[cur].children[c - 'a'];
         }
-        tries[cur].hits = {i};
+        tries[cur].pattern = i;
       }
       f = vector<int>(tries.size(), 0);
       deque<int> bfs = {0};
@@ -101,8 +102,7 @@ class Ac {
           while (j && tries[j].children[i] == 0)
             j = f[j];
           f[nxt] = j = tries[j].children[i];
-          auto& hits = tries[nxt].hits;
-          hits.insert(hits.end(), tries[j].hits.begin(), tries[j].hits.end());
+          tries[nxt].last = (tries[j].pattern != -1 ) ? j : tries[j].last;
         }
       }
     }
@@ -114,8 +114,12 @@ class Ac {
         while (j && tries[j].children[s[i] - 'a'] == 0)
           j = f[j];
         j = tries[j].children[s[i] - 'a'];
-        for (int hit : tries[j].hits)
-          res.push_back({i - ps[hit].size() + 1, hit});
+        int last = (tries[j].pattern != -1) ? j : tries[j].last;
+        while (last) {
+          int p = tries[last].pattern;
+          res.push_back({i - ps[p].size() + 1, p});
+          last = tries[last].last;
+        }
       }
       return res;
     }
@@ -156,6 +160,6 @@ void test_ac() {
 
 int main() {
   //test_kmp();
-  //test_ac();
+  test_ac();
   return 0;
 }
