@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 using namespace std;
 
@@ -146,8 +147,127 @@ void test_ac() {
   }
 }
 
+class Sam {
+ public:
+  struct Trie {
+    int len = 0;  // len of the max suffix.
+    int link = -1;
+    int pos = -1;  // one of the ending pos.
+    int children[26] = {0};
+  };
+
+  Sam(const string& pattern) : p(pattern) {
+    tries.push_back(Trie());
+    int last = 0;
+    for (int i = 0; i < p.size(); ++i) {
+      int c = p[i] - 'a';
+      int cur = tries.size();
+      tries.push_back(Trie());
+      tries[cur].len = tries[last].len + 1;
+      tries[cur].pos = i;
+      int p = last;
+      while (p != -1 && tries[p].children[c] == 0) {
+        tries[p].children[c] = cur;
+        p = tries[p].link;
+      }
+      if (p == -1) {
+        tries[cur].link = 0;
+      } else {
+        int q = tries[p].children[c];
+        if (tries[q].len == tries[p].len + 1) {
+          tries[cur].link = q;
+        } else {
+          int clone = tries.size();
+          tries.push_back(Trie(tries[q]));
+          tries[clone].len = tries[p].len + 1;
+          tries[clone].pos = i;
+          while (p != -1 && tries[p].children[c] == q) {
+            tries[p].children[c] = clone;
+            p = tries[p].link;
+          }
+          tries[q].link = tries[cur].link = clone;
+        }
+      }
+      last = cur;
+    }
+  }
+
+  void print(int idx = 0, int level = 0, int c = -1) const {
+    string s = (idx == 0) ? ""
+                          : p.substr(tries[idx].pos - tries[idx].len + 1,
+                                     tries[idx].len);
+    printf("%s", string(level * 2, ' ').c_str());
+    printf("%d ", idx);
+    if (c != -1) {
+      int len = tries[idx].len;
+      string sub = p.substr(tries[idx].pos - len + 1, len);
+      printf("%c->%s ", 'a' + c, sub.c_str());
+    }
+    printf("link: %d\n", tries[idx].link);
+    for (int i = 0; i < 26; ++i) {
+      if (tries[idx].children[i] != 0)
+        print(tries[idx].children[i], level + 1, i);
+    }
+  }
+
+  vector<string> longest_substr(const string& s) const {
+    vector<string> res(s.size());
+    int cur = 0;
+    int len = 0;
+    for (int i = 0; i < s.size(); ++i) {
+      int c = s[i] - 'a';
+      while (cur != 0 && tries[cur].children[c] == 0) {
+        cur = tries[cur].link;
+        len = tries[cur].len;
+      }
+      if (tries[cur].children[c] != 0) {
+        cur = tries[cur].children[c];
+        ++len;
+      }
+      if (len > 0) res[i] = p.substr(tries[cur].pos - len + 1, len);
+    }
+    return res;
+  }
+
+  vector<Trie> tries;
+  string p;
+};
+
+void test_sam() {
+  for (int i = 0; i < 100; ++i) {
+    string p = rand_str(rand() % 30 + 1, 7);
+    string s = rand_str(rand() % 1000 + 1, 7);
+
+    vector<string> subs;
+    for (int l = 0; l < p.size(); ++l) {
+      for (int r = l; r < p.size(); ++r) {
+        subs.push_back(p.substr(l, r - l + 1));
+      }
+    }
+    sort(subs.begin(), subs.end());
+    subs.resize(unique(subs.begin(), subs.end()) - subs.begin());
+    sort(subs.begin(), subs.end(), [](const string& lhs, const string& rhs) {
+      return lhs.size() > rhs.size();
+    });
+
+    vector<string> res = Sam(p).longest_substr(s);
+    for (int j = 0; j < s.size(); ++j) {
+      string sub;
+      for (int k = 0; k < subs.size(); ++k) {
+        if (subs[k].size() > j + 1) continue;
+        if (subs[k] == s.substr(j - subs[k].size() + 1, subs[k].size())) {
+          sub = subs[k];
+          break;
+        }
+      }
+      assert(sub == res[j]);
+    }
+  }
+}
+
 int main() {
   // test_kmp();
-  test_ac();
+  // test_ac();
+  test_sam();
   return 0;
 }
