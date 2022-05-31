@@ -152,20 +152,25 @@ class Sam {
   struct Trie {
     int len = 0;  // len of the max suffix.
     int link = -1;
-    int pos = -1;  // one of the ending pos.
     int children[26] = {0};
+
+    int first_pos = -1;
+    bool is_clone = false;
+    vector<int> inv_link;
+    int pos_cnt = 0;
   };
 
-  Sam(const string& pattern) : p(pattern) {
+  Sam(const string& text) : t(text) {
     tries.push_back(Trie());
     int last = 0;
-    for (int i = 0; i < p.size(); ++i) {
-      int c = p[i] - 'a';
+    for (int i = 0; i < t.size(); ++i) {
       int cur = tries.size();
       tries.push_back(Trie());
-      tries[cur].len = tries[last].len + 1;
-      tries[cur].pos = i;
+      tries[cur].len = i + 1;
+      tries[cur].first_pos = i;
       int p = last;
+
+      int c = t[i] - 'a';
       while (p != -1 && tries[p].children[c] == 0) {
         tries[p].children[c] = cur;
         p = tries[p].link;
@@ -180,7 +185,8 @@ class Sam {
           int clone = tries.size();
           tries.push_back(Trie(tries[q]));
           tries[clone].len = tries[p].len + 1;
-          tries[clone].pos = i;
+          tries[clone].first_pos = tries[q].first_pos;
+          tries[clone].is_clone = true;
           while (p != -1 && tries[p].children[c] == q) {
             tries[p].children[c] = clone;
             p = tries[p].link;
@@ -190,24 +196,64 @@ class Sam {
       }
       last = cur;
     }
+
+    for (int i = tries.size() - 1; i > 0; --i) {
+      tries[tries[i].link].inv_link.push_back(i);
+    }
+    pos_cnt(0);
   }
 
-  void print(int idx = 0, int level = 0, int c = -1) const {
-    string s = (idx == 0) ? ""
-                          : p.substr(tries[idx].pos - tries[idx].len + 1,
-                                     tries[idx].len);
-    printf("%s", string(level * 2, ' ').c_str());
-    printf("%d ", idx);
-    if (c != -1) {
-      int len = tries[idx].len;
-      string sub = p.substr(tries[idx].pos - len + 1, len);
-      printf("%c->%s ", 'a' + c, sub.c_str());
+  int pos_cnt(int u) {
+    tries[u].pos_cnt = !tries[u].is_clone;
+    for (int v : tries[u].inv_link) {
+      tries[u].pos_cnt += pos_cnt(v);
     }
-    printf("link: %d\n", tries[idx].link);
-    for (int i = 0; i < 26; ++i) {
-      if (tries[idx].children[i] != 0)
-        print(tries[idx].children[i], level + 1, i);
+    return tries[u].pos_cnt;
+  }
+
+  void print() const {
+    for (int u = 0; u < tries.size(); ++u) {
+      string schild;
+      for (int i = 0; i < 26; ++i) {
+        if (tries[u].children[i] != 0) {
+          if (!schild.empty()) schild += ", ";
+          schild += string(1, 'a' + i) + "->" +
+                    to_string(tries[u].children[i]) + ", ";
+        }
+      }
+      string sposs;
+      if (u != 0) {
+        vector<int> poss = all_pos(u);
+        int len = tries[u].len;
+        sort(poss.begin(), poss.end());
+        int j = 0;
+        for (int i = 0; i < poss.size(); ++i) {
+          int bgn = poss[i] - len + 1;
+          if (j < bgn) sposs += t.substr(j, bgn - j);
+          while (i + 1 < poss.size() && poss[i + 1] - len + 1 < poss[i]) ++i;
+          int end = poss[i];
+          sposs += "{" + t.substr(bgn, end - bgn + 1) + "}";
+          j = end + 1;
+        }
+        sposs += t.substr(j);
+      }
+      printf(
+          "%d len: %d link: %d first_pos: %d is_clone: %d, children: %s "
+          "poss: %s cnt:%d\n",
+          u, tries[u].len, tries[u].link, tries[u].first_pos, tries[u].is_clone,
+          schild.c_str(), sposs.c_str(), tries[u].pos_cnt);
     }
+  }
+
+  vector<int> all_pos(int u) const {
+    vector<int> res, bfs = {u};
+    while (!bfs.empty()) {
+      int cur = bfs.back();
+      bfs.pop_back();
+      if (!tries[cur].is_clone) res.push_back(tries[cur].first_pos);
+      for (int v : tries[cur].inv_link) bfs.push_back(v);
+    }
+    return res;
   }
 
   vector<string> longest_substr(const string& s) const {
@@ -224,19 +270,21 @@ class Sam {
         cur = tries[cur].children[c];
         ++len;
       }
-      if (len > 0) res[i] = p.substr(tries[cur].pos - len + 1, len);
+      if (len > 0) res[i] = t.substr(tries[cur].first_pos - len + 1, len);
     }
     return res;
   }
 
   vector<Trie> tries;
-  string p;
+  vector<vector<int>> cnt_idxs;
+  string t;
 };
 
 void test_sam() {
   for (int i = 0; i < 100; ++i) {
-    string p = rand_str(rand() % 30 + 1, 7);
-    string s = rand_str(rand() % 1000 + 1, 7);
+    string p = rand_str(rand() % 20 + 1, 7);
+    string s = rand_str(rand() % 100 + 1, 7);
+    printf("Test case #%d: '%s' in %s\n", i, p.data(), s.data());
 
     vector<string> subs;
     for (int l = 0; l < p.size(); ++l) {
@@ -268,6 +316,9 @@ void test_sam() {
 int main() {
   // test_kmp();
   // test_ac();
-  test_sam();
+  // test_sam();
+  Sam sam("gxgogogxg");
+  // Sam sam("abcbc");
+  sam.print();
   return 0;
 }
