@@ -44,21 +44,29 @@ void exgcd(int a, int b, int& d, int& x, int& y, int k = 1) {
 //   a*x % mod = m*b*x % mod
 //   m = m*b*x % mod
 //   1 = b*x % mod
-int rev(int b, int mod) {
-  int d, x, y;
+long rev(long b, long mod) {
+  long d, x, y;
   exgcd(b, mod, d, x, y);
   return (x % mod + mod) % mod;
 }
 
 // mod >= 2
-int rev2(int b, int mod) {
-  int exp = mod - 2;
+long rev2(long b, long mod) {
+  long exp = mod - 2;
   long res = 1;
   long base = b;
   while (exp) {
     if (exp & 1) res = res * base % mod;
     base = base * base % mod;
     exp >>= 1;
+  }
+  return res;
+}
+
+vector<long> revs(long n, long MOD) {
+  vector<long> res(n + 1, 1);
+  for (long i = 2; i <= n; ++i) {
+    res[i] = (MOD - MOD / i) * res[MOD % i] % MOD;
   }
   return res;
 }
