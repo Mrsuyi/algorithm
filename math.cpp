@@ -1,6 +1,4 @@
-#include <cmath>
 #include <vector>
-#include <iostream>
 
 using namespace std;
 
@@ -52,25 +50,28 @@ long ModInvF(long b, long MOD) {
 }
 
 // Requires MOD > facs.size()
-void BuildFacAndInv(vector<long>& facs, vector<long>& invs, vector<long>& facinvs, long MOD) {
+vector<long> facs, invs, facinvs;
+
+void InitFacInv(long n, long MOD) {
+  facs.resize(n);
+  invs.resize(n);
+  facinvs.resize(n);
   facs[1] = invs[1] = facinvs[1] = 1;
-  for (int i = 2; i < fac.size(); ++i) {
+  for (int i = 2; i < facs.size(); ++i) {
     facs[i] = facs[i - 1] * i % MOD;
     invs[i] = (MOD - MOD / i) * invs[MOD % i] % MOD;
     facinvs[i] = facinvs[i - 1] * invs[i] % MOD;
   }
 }
 
+long Cnm(long n, long m, long MOD) {
+  return facs[n] * facinvs[n - m] * facinvs[m] % MOD;
+}
+
 // Get C(n, m) % p. Requires p to be a small number.
-long Lucas(long n, long m, long p) {
+long Lucas(long n, long m, long MOD) {
   if (m == 0) return 1;
-  auto Fac = [](long n) {
-    long res = 1;
-    while (n) res *= n--;
-    return res;
-  }
-  long cnm = Fac(n % p) / Fac(m % p) / Fac(p);
-  return (cnm * Lucas(n / p, m / p, p)) % p;
+  return Cnm(n % MOD, m % MOD, MOD) * Lucas(n / MOD, m / MOD, MOD) % MOD;
 }
 
 // Chinese Remainder Theory
@@ -85,7 +86,4 @@ long CRT(const vector<long>& remainder, const vector<long>& mods) {
   return (ans % n + n) % n;
 }
 
-int main() {
-  
-  return 0;
-}
+int main() { return 0; }
