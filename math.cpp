@@ -53,11 +53,10 @@ long ModInvF(long b, long MOD) {
 vector<long> facs, invs, facinvs;
 
 void InitFacInv(long n, long MOD) {
-  facs.resize(n);
-  invs.resize(n);
-  facinvs.resize(n);
-  facs[1] = invs[1] = facinvs[1] = 1;
-  for (int i = 2; i < facs.size(); ++i) {
+  facs.resize(n + 1, 1);
+  invs.resize(n + 1, 1);
+  facinvs.resize(n + 1, 1);
+  for (int i = 2; i <= n; ++i) {
     facs[i] = facs[i - 1] * i % MOD;
     invs[i] = (MOD - MOD / i) * invs[MOD % i] % MOD;
     facinvs[i] = facinvs[i - 1] * invs[i] % MOD;
@@ -65,6 +64,7 @@ void InitFacInv(long n, long MOD) {
 }
 
 long Cnm(long n, long m, long MOD) {
+  if (n < m || n == m) return 0;
   return facs[n] * facinvs[n - m] * facinvs[m] % MOD;
 }
 
