@@ -1,10 +1,9 @@
-#include <cmath>
+#include <cassert>
 #include <deque>
 #include <iostream>
 #include <string>
-#include <unordered_map>
-#include <unordered_set>
 #include <vector>
+
 using namespace std;
 
 string rand_str(int len, int chr = 26) {
@@ -13,8 +12,7 @@ string rand_str(int len, int chr = 26) {
   return res;
 }
 
-class Kmp {
- public:
+struct Kmp {
   Kmp(const string& pattern) : p(pattern), f(p.size() + 1, 0) {
     for (int i = 1; i < p.size(); ++i) {
       int j = f[i];
@@ -23,20 +21,14 @@ class Kmp {
     }
   }
 
-  int match(const string& s) const {
-    int j = 0;
-    for (int i = 0; i < s.size(); ++i) {
-      while (j && s[i] != p[j]) j = f[j];
-      if (s[i] == p[j]) {
-        if (++j == p.size()) return i - p.size() + 1;
-      }
-    }
-    return -1;
+  bool match(char c, int& j) const {
+    while (j && c != p[j]) j = f[j];
+    if (c == p[j]) ++j;
+    return j == p.size();
   }
 
-  // common[i] is the length of longest common prefix&suffix of pattern[0,i].
   string p;
-  vector<int> f;
+  vector<int> f;  // f[i]: longest common prefix/suffix of p[0, i-1].
 };
 
 void test_kmp() {
@@ -44,20 +36,16 @@ void test_kmp() {
   for (int i = 0; i < 100; ++i) {
     string p = rand_str(rand() % 10 + 1, 5);
     string s = rand_str(rand() % 100 + 1, 5);
-    int kmp = Kmp(p).match(s);
+    Kmp kmp(p);
 
-    int bf = -1;
-    for (int i = 0; i + p.size() <= s.size(); ++i) {
-      int j = 0;
-      for (; j < p.size(); ++j) {
-        if (s[i + j] != p[j]) break;
-      }
-      if (j == p.size()) {
-        bf = i;
-        break;
+    for (int k = 0, j = 0; k < s.size(); ++k) {
+      bool res_kmp = kmp.match(s[k], j);
+      if (k >= p.size()) {
+        bool res_bf = s.substr(k - p.size() + 1, p.size()) == p;
+        assert(res_kmp == res_bf);
+        if (res_kmp) j = kmp.f[j];
       }
     }
-    assert(bf == kmp);
   }
 }
 
@@ -314,11 +302,11 @@ void test_sam() {
 }
 
 int main() {
-  // test_kmp();
+  test_kmp();
   // test_ac();
   // test_sam();
-  Sam sam("gxgogogxg");
+  // Sam sam("gxgogogxg");
   // Sam sam("abcbc");
-  sam.print();
+  // sam.print();
   return 0;
 }
